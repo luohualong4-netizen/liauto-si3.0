@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SI Agent 首页设计预览 v3</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, sans-serif;
+    background: #111;
+    color: #fff;
+    padding: 24px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .preview-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-align: center; }
+
+  .browser-frame {
+    width: 100%; max-width: 1100px;
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .browser-chrome {
+    background: #2a2a2a; padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r{background:#FF5F57;}.dot-y{background:#FEBC2E;}.dot-g{background:#28C840;}
+  .url-bar { flex:1; background:rgba(255,255,255,0.06); border-radius:6px; padding:5px 12px; font-size:11px; color:#666; text-align:center; }
+
+  /* ══ NAV — frosted white over dark ══ */
+  .nav {
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: saturate(160%) blur(28px);
+    -webkit-backdrop-filter: saturate(160%) blur(28px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+    padding: 0 40px;
+    height: 54px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-left { display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .nav-brand-si { font-size:11px; font-weight:500; color:rgba(255,255,255,0.45); letter-spacing:0.1em; }
+  .nav-links { display:flex; gap:32px; }
+  .nav-link { font-size:12.5px; color:rgba(255,255,255,0.5); position:relative; padding:4px 0; cursor:pointer; transition:color 0.2s; }
+  .nav-link:hover { color:rgba(255,255,255,0.85); }
+  .nav-link.active { color:white; font-weight:500; }
+  .nav-link.active::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:1.5px; background:rgba(255,255,255,0.7); border-radius:1px; }
+  .nav-right { display:flex; align-items:center; gap:8px; }
+  .nav-avatar { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.12); border:0.5px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .nav-settings { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:rgba(255,255,255,0.35); }
+  .nav-settings:hover { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.7); }
+
+  /* ══ HERO — dark immersive ══ */
+  .hero {
+    position: relative;
+    background: #040f09;
+    padding: 72px 40px 80px;
+    display: flex; flex-direction:column; align-items:center;
+    overflow: hidden;
+    /* Layered green radial glows */
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 0%,   rgba(27,94,64,0.60) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 15% 100%,  rgba(13,59,46,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 100%,  rgba(13,59,46,0.25) 0%, transparent 60%),
+      #030e07;
+  }
+  /* Architectural grid */
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events:none;
+  }
+  /* Subtle noise texture via SVG filter */
+  .hero::after {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse 100% 70% at 50% 50%, rgba(20,70,40,0.15) 0%, transparent 70%);
+    pointer-events:none;
+  }
+
+  .hero-content { position:relative; z-index:1; text-align:center; margin-bottom:44px; }
+
+  /* Apple-style word-by-word reveal */
+  .hero-title {
+    font-size: clamp(40px, 5vw, 54px);
+    font-weight: 700;
+    line-height: 1.16;
+    letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  .line1 { display:block; color: rgba(255,255,255,0.92); }
+  .line2 { display:block; color: #6EE7B7; }  /* mint accent */
+
+  .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+    animation: reveal 0.7s cubic-bezier(0.34, 1.15, 0.64, 1) forwards;
+  }
+  .w1{animation-delay:0.05s;}.w2{animation-delay:0.14s;}.w3{animation-delay:0.23s;}
+  .w4{animation-delay:0.31s;}.w5{animation-delay:0.39s;}
+
+  @keyframes reveal {
+    to { opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+
+  .hero-sub {
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.40);
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    opacity:0; transform:translateY(14px);
+    animation: reveal 0.65s cubic-bezier(0.34,1.15,0.64,1) 0.52s forwards;
+  }
+  .hero-sub .sep { color: rgba(255,255,255,0.18); margin: 0 8px; }
+
+  /* ══ AGENT CARD — glassmorphism ══ */
+  .agent-wrap {
+    position:relative; z-index:1;
+    width:100%; max-width:680px;
+    opacity:0; transform:translateY(22px);
+    animation: reveal 0.65s cubic-bezier(0.34,1.15,0.64,1) 0.68s forwards;
+  }
+
+  .agent-card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 0.5px solid rgba(255,255,255,0.14);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 0.5px rgba(255,255,255,0.04),
+      0 8px 32px rgba(0,0,0,0.45),
+      0 32px 80px rgba(0,0,0,0.28);
+  }
+
+  .agent-hd {
+    background: rgba(255,255,255,0.06);
+    border-bottom: 0.5px solid rgba(255,255,255,0.09);
+    padding: 13px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .agent-hd-l { display:flex; align-items:center; gap:10px; }
+  .agent-av {
+    width:32px; height:32px; border-radius:50%;
+    background: rgba(255,255,255,0.12);
+    border: 0.5px solid rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .agent-name  { font-size:12.5px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:2px; }
+  .agent-status { display:flex; align-items:center; gap:5px; font-size:10px; color:rgba(255,255,255,0.38); }
+  .sdot { width:5px; height:5px; border-radius:50%; background:#4ADE80; }
+  .win-dots { display:flex; gap:5px; }
+  .wd { width:11px; height:11px; border-radius:50%; opacity:0.55; }
+
+  .agent-msgs {
+    padding:16px 18px 10px;
+    display:flex; flex-direction:column; gap:11px;
+  }
+  .msg-row { display:flex; align-items:flex-end; gap:8px; }
+  .msg-row.user { flex-direction:row-reverse; }
+  .msg-av {
+    width:26px; height:26px; border-radius:50%;
+    background:rgba(255,255,255,0.10);
+    border:0.5px solid rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .msg-av svg { width:13px; height:6px; }
+  .msg-bubble {
+    max-width:82%; padding:10px 14px;
+    border-radius:4px 16px 16px 16px;
+    font-size:12.5px; line-height:1.75;
+    color:rgba(255,255,255,0.82);
+    background:rgba(255,255,255,0.08);
+    border:0.5px solid rgba(255,255,255,0.10);
+  }
+  .msg-row.user .msg-bubble {
+    border-radius:16px 4px 16px 16px;
+    background:rgba(110,231,183,0.18);
+    border-color:rgba(110,231,183,0.28);
+    color:rgba(255,255,255,0.9);
+  }
+  .msg-bubble ol { padding-left:18px; margin-top:6px; }
+  .msg-bubble li { margin-bottom:3px; font-size:12px; color:rgba(255,255,255,0.62); }
+  .msg-bubble strong { color:#6EE7B7; font-weight:600; }
+
+  .su-cad-row { display:flex; gap:7px; margin-top:9px; }
+  .su-q { font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:6px; }
+  .su-btn {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:5px 12px;
+    background:rgba(110,231,183,0.10);
+    border:0.5px solid rgba(110,231,183,0.28);
+    border-radius:8px;
+    font-size:11px; color:#6EE7B7; font-weight:500; cursor:pointer;
+  }
+
+  .msg-cta {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:9px; padding:6px 13px;
+    background:rgba(255,255,255,0.10);
+    border:0.5px solid rgba(255,255,255,0.20);
+    border-radius:8px; font-size:11.5px; color:rgba(255,255,255,0.8); font-weight:500; cursor:pointer;
+  }
+  .msg-cta:hover { background:rgba(255,255,255,0.18); }
+
+  .chips { padding:0 18px 13px; display:flex; gap:7px; flex-wrap:wrap; }
+  .chip {
+    font-size:11.5px; font-weight:500;
+    color:rgba(255,255,255,0.5);
+    background:rgba(255,255,255,0.06);
+    border:0.5px solid rgba(255,255,255,0.14);
+    border-radius:20px; padding:5px 13px; cursor:pointer;
+    transition:all 0.18s;
+  }
+  .chip:hover { background:rgba(110,231,183,0.15); color:#6EE7B7; border-color:rgba(110,231,183,0.3); }
+
+  .input-row {
+    display:flex; align-items:center; gap:10px;
+    padding:11px 18px 14px;
+    border-top:0.5px solid rgba(255,255,255,0.07);
+    background:rgba(0,0,0,0.12);
+  }
+  .input-ph { flex:1; font-size:13px; color:rgba(255,255,255,0.22); }
+  .send-btn {
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.9);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.35);
+  }
+
+  /* ══ FEATURE CARDS — light section ══ */
+  .cards-section { background:#F4F3EF; padding:44px 40px 64px; }
+  .cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:1020px; margin:0 auto; }
+  .fcard {
+    background:white; border-radius:18px; padding:26px 24px 22px;
+    display:flex; align-items:center; gap:16px;
+    border:0.5px solid rgba(0,0,0,0.06);
+    box-shadow:0 1px 4px rgba(0,0,0,0.05);
+    cursor:pointer; transition:all 0.28s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .fcard:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(13,59,46,0.10); border-color:rgba(13,59,46,0.12); }
+  .fcard-icon { width:44px; height:44px; border-radius:12px; background:rgba(13,59,46,0.07); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.25s; }
+  .fcard:hover .fcard-icon { background:rgba(13,59,46,0.13); }
+  .fcard-icon svg { width:20px; height:20px; stroke:#1B5E40; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .fcard-body { flex:1; }
+  .fcard-title { font-size:13.5px; font-weight:600; color:#111; margin-bottom:4px; }
+  .fcard-desc { font-size:11.5px; color:#999; line-height:1.5; }
+  .fcard-arrow { color:#ddd; transition:color 0.22s, transform 0.28s; }
+  .fcard:hover .fcard-arrow { color:#1B5E40; transform:translateX(4px); }
+
+  .footer { background:#F4F3EF; text-align:center; padding:20px 40px 32px; font-size:10.5px; color:#bbb; letter-spacing:0.05em; border-top:0.5px solid rgba(0,0,0,0.05); }
+
+  /* Annotations */
+  .annotations { width:100%; max-width:1100px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px; }
+  .ann { background:rgba(255,255,255,0.04); border:0.5px solid rgba(255,255,255,0.09); border-radius:10px; padding:14px 16px; }
+  .ann-title { font-size:11px; font-weight:600; color:#6EE7B7; letter-spacing:0.05em; margin-bottom:6px; text-transform:uppercase; }
+  .ann-body { font-size:11.5px; color:rgba(255,255,255,0.45); line-height:1.65; }
+</style>
+</head>
+<body>
+
+<p class="preview-label">SI AGENT 首页 · 设计预览 v3 · 暗色沉浸 + 白色顶栏 + 词语动效</p>
+
+<div class="browser-frame">
+  <div class="browser-chrome">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">localhost:8080 · 理想汽车 SI 3.0 空间标准</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-left">
+      <svg width="40" height="16" viewBox="0 0 49 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" fill="white" d="M38.4 0.7L43.2 9.6H28.2L23.4 0.7H38.4ZM24.1 11C22.4 11 20.6 10.9 19.5 9.9C18.6 9.2 18.1 8.4 17.6 7.4C17.5 7.2 16.1 4.8 15.1 3L15.1 2.96C14.5 1.85 14 0.93 13.9 0.8H0C0.5 1.7 1 2.6 1.5 3.6C2.7 5.8 3.9 8.1 5.2 10.3C6.7 13 8.1 15.6 10.8 17.5C12 18.5 13.4 19.1 14.9 19.5C16.5 19.8 18 19.9 19.6 19.9H32L27.1 11H24.1ZM29 11L33.9 19.9H48.9L44 11H29Z"/></svg>
+      <span class="nav-brand-si">SI 3.0</span>
+    </div>
+    <div class="nav-links">
+      <span class="nav-link active">首页</span>
+      <span class="nav-link">外立面标准</span>
+      <span class="nav-link">室内标准</span>
+      <span class="nav-link">外立面生成助手</span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="nav-settings">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="line1">
+          <span class="word w1">理想汽车</span><span style="display:inline-block;width:0.25em"></span><span class="word w2">空间产品</span>
+        </span>
+        <span class="line2">
+          <span class="word w3">SI</span><span style="display:inline-block;width:0.2em"></span><span class="word w4">3.0</span><span style="display:inline-block;width:0.25em"></span><span class="word w5">Agent</span>
+        </span>
+      </h1>
+      <p class="hero-sub">智能对话，精准设计<span class="sep">·</span>让每个空间标准触手可及</p>
+    </div>
+
+    <!-- Agent Card -->
+    <div class="agent-wrap">
+      <div class="agent-card">
+        <div class="agent-hd">
+          <div class="agent-hd-l">
+            <div class="agent-av">
+              <svg width="16" height="7" viewBox="0 0 49 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" fill="white" d="M38.4 0.7L43.2 9.6H28.2L23.4 0.7H38.4ZM24.1 11C22.4 11 20.6 10.9 19.5 9.9C18.6 9.2 18.1 8.4 17.6 7.4C17.5 7.2 16.1 4.8 15.1 3L15.1 2.96C14.5 1.85 14 0.93 13.9 0.8H0C0.5 1.7 1 2.6 1.5 3.6C2.7 5.8 3.9 8.1 5.2 10.3C6.7 13 8.1 15.6 10.8 17.5C12 18.5 13.4 19.1 14.9 19.5C16.5 19.8 18 19.9 19.6 19.9H32L27.1 11H24.1ZM29 11L33.9 19.9H48.9L44 11H29Z"/></svg>
+            </div>
+            <div>
+              <div class="agent-name">SI Agent</div>
+              <div class="agent-status"><span class="sdot"></span>在线</div>
+            </div>
+          </div>
+          <div class="win-dots">
+            <div class="wd" style="background:#FEBC2E"></div>
+            <div class="wd" style="background:#28C840"></div>
+            <div class="wd" style="background:#FF5F57"></div>
+          </div>
+        </div>
+
+        <div class="agent-msgs">
+          <!-- Welcome -->
+          <div class="msg-row">
+            <div class="msg-av"><svg viewBox="0 0 49 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" fill="white" d="M38.4 0.7L43.2 9.6H28.2L23.4 0.7H38.4ZM24.1 11C22.4 11 20.6 10.9 19.5 9.9C18.6 9.2 18.1 8.4 17.6 7.4C17.5 7.2 16.1 4.8 15.1 3L15.1 2.96C14.5 1.85 14 0.93 13.9 0.8H0C0.5 1.7 1 2.6 1.5 3.6C2.7 5.8 3.9 8.1 5.2 10.3C6.7 13 8.1 15.6 10.8 17.5C12 18.5 13.4 19.1 14.9 19.5C16.5 19.8 18 19.9 19.6 19.9H32L27.1 11H24.1ZM29 11L33.9 19.9H48.9L44 11H29Z"/></svg></div>
+            <div class="msg-bubble">你好，我是理想汽车 SI 3.0 的 Agent。可以帮你查询外立面设计规范，或解答材料选用问题。</div>
+          </div>
+          <!-- User -->
+          <div class="msg-row user">
+            <div class="msg-bubble">外立面标识的定位原则是什么？</div>
+          </div>
+          <!-- AI response -->
+          <div class="msg-row">
+            <div class="msg-av"><svg viewBox="0 0 49 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" fill="white" d="M38.4 0.7L43.2 9.6H28.2L23.4 0.7H38.4ZM24.1 11C22.4 11 20.6 10.9 19.5 9.9C18.6 9.2 18.1 8.4 17.6 7.4C17.5 7.2 16.1 4.8 15.1 3L15.1 2.96C14.5 1.85 14 0.93 13.9 0.8H0C0.5 1.7 1 2.6 1.5 3.6C2.7 5.8 3.9 8.1 5.2 10.3C6.7 13 8.1 15.6 10.8 17.5C12 18.5 13.4 19.1 14.9 19.5C16.5 19.8 18 19.9 19.6 19.9H32L27.1 11H24.1ZM29 11L33.9 19.9H48.9L44 11H29Z"/></svg></div>
+            <div class="msg-bubble">
+              外立面标识定位遵循以下原则：
+              <ol>
+                <li>一级标识水平<strong>居中</strong>于横楣带，竖向居中</li>
+                <li>LED 正发光，色温 <strong>6500K</strong>，5mm 乳白亚克力</li>
+                <li>二级标识置于横楣右侧区域</li>
+              </ol>
+              <div style="margin-top:10px;">
+                <div class="su-q">需要相关 SU 模型或 CAD 文件吗？</div>
+                <div class="su-cad-row">
+                  <span class="su-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    SU 模型
+                  </span>
+                  <span class="su-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    CAD 文件
+                  </span>
+                </div>
+              </div>
+              <div class="msg-cta">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h4"/></svg>
+                查看规范图册
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chips">
+          <span class="chip">标识定位原则</span>
+          <span class="chip">横楣材料规格</span>
+          <span class="chip">幕墙玻璃标准</span>
+          <span class="chip">门斗构造要求</span>
+        </div>
+
+        <div class="input-row">
+          <span class="input-ph">输入您的问题…</span>
+          <div class="send-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0D3B2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-section">
+    <div class="cards-grid">
+      <div class="fcard">
+        <div class="fcard-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 00-4 0v2M2 12h20"/></svg></div>
+        <div class="fcard-body"><div class="fcard-title">外立面标准查询</div><div class="fcard-desc">快速查询外立面设计规范</div></div>
+        <div class="fcard-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-6 9 6v11a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 22V12h6v10"/></svg></div>
+        <div class="fcard-body"><div class="fcard-title">室内空间设计</div><div class="fcard-desc">了解室内布局与材质标准</div></div>
+        <div class="fcard-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="fcard">
+        <div class="fcard-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <div class="fcard-body"><div class="fcard-title">智能生成 Agent</div><div class="fcard-desc">AI 辅助生成设计方案</div></div>
+        <div class="fcard-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">© 2026 理想汽车 · 空间设计标准 SI 3.0</div>
+</div>
+
+<div class="annotations">
+  <div class="ann">
+    <div class="ann-title">① Nav 随背景自适应</div>
+    <div class="ann-body">顶栏用 rgba(255,255,255,0.10) + backdrop-filter blur，悬浮在暗色 Hero 上呈半透明白色。滚动到浅色区域后自动变实白（代码通过 scroll 事件切换 class 实现）。</div>
+  </div>
+  <div class="ann">
+    <div class="ann-title">② 词语逐个弹入</div>
+    <div class="ann-body">"理想汽车"→"空间产品"→"SI"→"3.0"→"Agent" 5个词各自独立 animation，间隔约 90ms，从下方 24px + 模糊 4px 弹入。用 IntersectionObserver 触发，不依赖 scroll。</div>
+  </div>
+  <div class="ann">
+    <div class="ann-title">③ SU / CAD 下载流</div>
+    <div class="ann-body">Agent 每条规范回复末尾附"需要 SU 模型或 CAD 文件吗？"+ 两个按钮。当前版本展示占位提示；文件就绪后直接替换 href。下载按钮颜色与消息气泡的 mint green 一致。</div>
+  </div>
+</div>
+
+</body>
+</html>

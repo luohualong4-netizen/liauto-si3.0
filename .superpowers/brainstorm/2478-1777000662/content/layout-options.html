@@ -1,0 +1,217 @@
+<h2>首页布局方向</h2>
+<p class="subtitle">三种视觉结构方案——哪种感觉最符合你对 SI Agent 首页的期待？</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#F4F3EF;border-radius:8px;">
+      <div style="background:#0D3B2E;height:36px;border-radius:6px;display:flex;align-items:center;padding:0 14px;margin-bottom:12px;">
+        <div style="width:28px;height:10px;background:rgba(255,255,255,0.9);border-radius:3px;margin-right:auto"></div>
+        <div style="display:flex;gap:18px;">
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+        </div>
+      </div>
+      <!-- Title area -->
+      <div style="text-align:center;margin-bottom:12px;padding:8px 0;">
+        <div style="width:60%;height:24px;background:#111;border-radius:4px;margin:0 auto 8px;"></div>
+        <div style="width:45%;height:10px;background:#999;border-radius:3px;margin:0 auto;"></div>
+      </div>
+      <!-- Chat widget -->
+      <div style="background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);overflow:hidden;margin:0 auto;width:90%;">
+        <div style="background:#0D3B2E;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2)"></div>
+          <div>
+            <div style="width:60px;height:7px;background:rgba(255,255,255,0.8);border-radius:2px;margin-bottom:3px;"></div>
+            <div style="width:30px;height:5px;background:rgba(255,255,255,0.4);border-radius:2px;"></div>
+          </div>
+        </div>
+        <div style="padding:10px;min-height:70px;">
+          <div style="background:#F0EFE9;border-radius:4px 10px 10px 10px;padding:8px 10px;width:80%;margin-bottom:6px;">
+            <div style="height:5px;background:#ccc;border-radius:2px;margin-bottom:3px;"></div>
+            <div style="height:5px;background:#ccc;border-radius:2px;width:70%;"></div>
+          </div>
+          <div style="background:#0D3B2E;border-radius:10px 4px 10px 10px;padding:8px 10px;width:65%;margin-left:auto;">
+            <div style="height:5px;background:rgba(255,255,255,0.7);border-radius:2px;"></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #eee;padding:8px 12px;display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;height:8px;background:#f0f0f0;border-radius:4px;"></div>
+          <div style="width:24px;height:24px;background:#0D3B2E;border-radius:50%;"></div>
+        </div>
+      </div>
+      <!-- Feature chips -->
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+        <div style="background:rgba(13,59,46,0.08);border:1px solid rgba(13,59,46,0.2);border-radius:20px;padding:4px 10px;font-size:10px;color:#1B5E40;">标识</div>
+        <div style="background:rgba(13,59,46,0.08);border:1px solid rgba(13,59,46,0.2);border-radius:20px;padding:4px 10px;font-size:10px;color:#1B5E40;">横楣</div>
+        <div style="background:rgba(13,59,46,0.08);border:1px solid rgba(13,59,46,0.2);border-radius:20px;padding:4px 10px;font-size:10px;color:#1B5E40;">幕墙</div>
+      </div>
+      <!-- Cards row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;">
+        <div style="background:white;border-radius:8px;padding:8px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="width:20px;height:20px;background:rgba(13,59,46,0.1);border-radius:5px;margin-bottom:5px;"></div>
+          <div style="height:5px;background:#333;border-radius:2px;margin-bottom:3px;"></div>
+          <div style="height:4px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:8px;padding:8px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="width:20px;height:20px;background:rgba(13,59,46,0.1);border-radius:5px;margin-bottom:5px;"></div>
+          <div style="height:5px;background:#333;border-radius:2px;margin-bottom:3px;"></div>
+          <div style="height:4px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:8px;padding:8px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="width:20px;height:20px;background:rgba(13,59,46,0.1);border-radius:5px;margin-bottom:5px;"></div>
+          <div style="height:5px;background:#333;border-radius:2px;margin-bottom:3px;"></div>
+          <div style="height:4px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · 居中简洁型</h3>
+      <p>标题 → 对话框 → 功能卡 纵向排列，贴近你的原始草图。干净，信息聚焦，上手即用感强。</p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#F4F3EF;border-radius:8px;">
+      <div style="background:#0D3B2E;height:36px;border-radius:6px;display:flex;align-items:center;padding:0 14px;margin-bottom:12px;">
+        <div style="width:28px;height:10px;background:rgba(255,255,255,0.9);border-radius:3px;margin-right:auto"></div>
+        <div style="display:flex;gap:18px;">
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+        </div>
+      </div>
+      <!-- Split layout -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;height:180px;">
+        <!-- Left: building image -->
+        <div style="background:linear-gradient(135deg,#0a1a12 0%,#1B5E40 40%,#2d7a50 70%,#0D3B2E 100%);border-radius:8px;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 20px,rgba(255,255,255,0.03) 20px,rgba(255,255,255,0.03) 21px),repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,255,255,0.03) 20px,rgba(255,255,255,0.03) 21px)"></div>
+          <div style="color:rgba(255,255,255,0.9);font-size:11px;font-weight:600;margin-bottom:4px;">理想汽车</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:8px;">综合中心 SI 3.0</div>
+          <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:60px;height:36px;background:rgba(255,255,255,0.06);border-radius:4px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+            <div style="width:30px;height:12px;background:rgba(255,255,255,0.7);border-radius:2px;"></div>
+          </div>
+        </div>
+        <!-- Right: chat -->
+        <div style="background:white;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.08);overflow:hidden;display:flex;flex-direction:column;">
+          <div style="background:#0D3B2E;padding:7px 10px;display:flex;align-items:center;gap:6px;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2)"></div>
+            <div style="width:50px;height:6px;background:rgba(255,255,255,0.7);border-radius:2px;"></div>
+          </div>
+          <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:5px;">
+            <div style="background:#F0EFE9;border-radius:3px 8px 8px 8px;padding:5px 7px;">
+              <div style="height:4px;background:#ccc;border-radius:2px;margin-bottom:2px;"></div>
+              <div style="height:4px;background:#ccc;border-radius:2px;width:60%;"></div>
+            </div>
+            <div style="background:#0D3B2E;border-radius:8px 3px 8px 8px;padding:5px 7px;margin-left:auto;width:70%;">
+              <div style="height:4px;background:rgba(255,255,255,0.7);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid #eee;padding:6px 8px;display:flex;gap:6px;">
+            <div style="flex:1;height:6px;background:#f0f0f0;border-radius:3px;"></div>
+            <div style="width:18px;height:18px;background:#0D3B2E;border-radius:50%;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom cards -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;">
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B · 左图右聊型</h3>
+      <p>左侧是 SI 标准建筑可视化（复用 facade.jpg 或抽象图形），右侧是对话框。空间感强，有沉浸感，展示了"设计 + AI"的双重属性。</p>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#F4F3EF;border-radius:8px;">
+      <div style="background:#0D3B2E;height:36px;border-radius:6px;display:flex;align-items:center;padding:0 14px;margin-bottom:12px;">
+        <div style="width:28px;height:10px;background:rgba(255,255,255,0.9);border-radius:3px;margin-right:auto"></div>
+        <div style="display:flex;gap:18px;">
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+          <div style="width:36px;height:6px;background:rgba(255,255,255,0.5);border-radius:3px;"></div>
+        </div>
+      </div>
+      <!-- Dark hero bg -->
+      <div style="background:linear-gradient(160deg,#051510 0%,#0D3B2E 50%,#0a2018 100%);border-radius:10px;padding:16px;position:relative;overflow:hidden;">
+        <!-- Grid lines -->
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 16px,rgba(255,255,255,0.025) 16px,rgba(255,255,255,0.025) 17px),repeating-linear-gradient(90deg,transparent,transparent 16px,rgba(255,255,255,0.025) 16px,rgba(255,255,255,0.025) 17px)"></div>
+        <!-- Title -->
+        <div style="text-align:center;margin-bottom:12px;position:relative;">
+          <div style="display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 10px;margin-bottom:8px;">
+            <div style="height:5px;width:60px;background:rgba(255,255,255,0.6);border-radius:2px;"></div>
+          </div>
+          <div style="height:18px;background:rgba(255,255,255,0.9);border-radius:4px;width:65%;margin:0 auto 6px;"></div>
+          <div style="height:8px;background:rgba(255,255,255,0.35);border-radius:3px;width:50%;margin:0 auto;"></div>
+        </div>
+        <!-- Chat (dark themed) -->
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;backdrop-filter:blur(10px);">
+          <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:7px;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2)"></div>
+            <div style="width:55px;height:6px;background:rgba(255,255,255,0.6);border-radius:2px;"></div>
+            <div style="margin-left:auto;display:flex;gap:4px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#FEBC2E;opacity:0.7"></div>
+              <div style="width:7px;height:7px;border-radius:50%;background:#28C840;opacity:0.7"></div>
+              <div style="width:7px;height:7px;border-radius:50%;background:#FF5F57;opacity:0.7"></div>
+            </div>
+          </div>
+          <div style="padding:10px 12px;min-height:65px;">
+            <div style="background:rgba(255,255,255,0.09);border-radius:3px 9px 9px 9px;padding:6px 8px;width:80%;margin-bottom:6px;">
+              <div style="height:4px;background:rgba(255,255,255,0.45);border-radius:2px;margin-bottom:2px;"></div>
+              <div style="height:4px;background:rgba(255,255,255,0.3);border-radius:2px;width:65%;"></div>
+            </div>
+            <div style="background:rgba(255,255,255,0.18);border-radius:9px 3px 9px 9px;padding:6px 8px;width:55%;margin-left:auto;">
+              <div style="height:4px;background:rgba(255,255,255,0.8);border-radius:2px;"></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,0.08);padding:7px 10px;display:flex;gap:7px;align-items:center;">
+            <div style="flex:1;height:7px;background:rgba(255,255,255,0.08);border-radius:3px;"></div>
+            <div style="width:22px;height:22px;background:rgba(255,255,255,0.9);border-radius:50%;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Light cards below -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;">
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+        <div style="background:white;border-radius:6px;padding:7px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="height:4px;background:#333;border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:3px;background:#ccc;border-radius:2px;width:80%;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · 暗色沉浸型</h3>
+      <p>Hero 区域采用深色建筑感背景（品牌深绿）+ 半透明玻璃态对话框，科技感和品牌感并重。下方功能卡回归浅色，形成明暗节奏。</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px;">点击选中方案，或在终端里直接告诉我你的倾向。这三种也可以混搭。</p>
