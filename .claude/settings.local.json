@@ -4,7 +4,8 @@
       "mcp__webfetch__web_fetch",
       "Read(//c/Users/luohualong/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/**)",
       "Read(//c/Users/luohualong/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/**)",
-      "Bash(bash \"C:/Users/luohualong/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/scripts/start-server.sh\" --project-dir \"c:/Users/luohualong/li-auto-si30\")"
+      "Bash(bash \"C:/Users/luohualong/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/scripts/start-server.sh\" --project-dir \"c:/Users/luohualong/li-auto-si30\")",
+      "Bash(start http://localhost:8080)"
     ]
   }
 }
