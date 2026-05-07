@@ -236,20 +236,16 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
    HERO
 ═══════════════════════════════════════ */
 .hero-wrap {
-  padding: 32px 40px 0;
-  max-width: var(--max-w);
-  margin: 0 auto;
+  padding: 0;
   animation: fadeUp 0.7s var(--ease) 0.1s both;
 }
 
 .hero-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 2 / 1;
-  border-radius: var(--r);
+  height: calc(100vh - var(--nav-h));
   overflow: hidden;
   background: #0a0a0a;
-  box-shadow: var(--sh-xl);
   user-select: none;
 }
 
@@ -280,10 +276,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 
 .hi {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -50%);
   pointer-events: none;
   animation: fadeIn 0.6s var(--ease) both;
 }
@@ -293,49 +286,52 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .hi:nth-child(4) { animation-delay: 1.00s; }
 .hi:nth-child(5) { animation-delay: 1.15s; }
 
-.hi-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--white);
-  background: rgba(8, 8, 8, 0.52);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 0.5px solid rgba(255, 255, 255, 0.22);
-  padding: 4px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.06em;
-  margin-bottom: 6px;
-  transition: background 0.22s, color 0.22s, transform 0.28s var(--spring-g), border-color 0.22s;
-}
-
-.hi-stem {
-  width: 1px;
-  height: 26px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.65), rgba(255,255,255,0.10));
+.hi-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.9);
+  transform: translate(-50%,-50%);
+  animation: intHsPulse 2s ease-out infinite;
 }
 
 .hi-dot {
-  width: 22px; height: 22px;
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 10px; height: 10px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 0 5px rgba(255,255,255,0.13), 0 2px 10px rgba(0,0,0,0.28);
-  animation: dotPulse 2.8s ease-in-out infinite;
-  transition: transform 0.28s var(--spring), box-shadow 0.28s;
-  flex-shrink: 0;
+  background: #fff;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 0 0 2px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.3);
+}
+
+.hi-stem { display: none; }
+
+.hi-label {
+  position: absolute;
+  top: calc(50% + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  background: rgba(0,0,0,.45);
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: .05em;
+  backdrop-filter: blur(4px);
 }
 
 /* Hover state — synced by JS .is-hovered */
-.hi.is-hovered .hi-dot {
-  transform: scale(1.4);
-  box-shadow: 0 0 0 10px rgba(255,255,255,0.16), 0 4px 20px rgba(0,0,0,0.32);
+.hi.is-hovered .hi-ring {
+  border-color: #fff;
+  background: rgba(255,255,255,.12);
 }
 .hi.is-hovered .hi-label {
-  background: rgba(255,255,255,0.97);
-  color: var(--text);
-  border-color: rgba(255,255,255,0.8);
-  transform: scale(1.07);
+  background: rgba(255,255,255,.9);
+  color: #111;
 }
 
 /* ─── Guide Button ─── */
@@ -403,7 +399,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 /* ─── Hero Text ─── */
 .hero-text {
   text-align: center;
-  padding: 32px 0 14px;
+  padding: 32px 40px 14px;
   animation: fadeUp 0.7s var(--ease) 0.3s both;
 }
 .hero-title {
@@ -589,8 +585,8 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   top: 18px; right: 18px;
   width: 32px; height: 32px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--white);
+  background: rgba(0,0,0,.08);
+  color: #555;
   font-size: 17px;
   font-weight: 300;
   display: flex;
@@ -600,7 +596,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   transition: background 0.2s, transform 0.28s var(--spring-g);
   line-height: 1;
 }
-.modal-close:hover { background: var(--accent-hover); transform: scale(1.12) rotate(90deg); }
+.modal-close:hover { background: rgba(0,0,0,.16); transform: scale(1.12) rotate(90deg); }
 
 .modal-title {
   font-family: var(--font-serif);
