@@ -25,10 +25,112 @@
     window.scrollTo({ top: 0, behavior: 'instant' });
 
     nav.classList.toggle('nav-dark', id === 'home');
+
+    if (id === 'interior') {
+      initInteriorTour();
+      initInteriorObserver();
+    }
   }
 
   navItems.forEach(btn => {
-    btn.addEventListener('click', () => switchSection(btn.dataset.section));
+    btn.addEventListener('click', () => {
+      closeMega();
+      switchSection(btn.dataset.section);
+    });
+  });
+
+  // ─── Mega Menu ───────────────────────────────────────────
+  const megaPanel = document.getElementById('megaPanel');
+  const megaScrim = document.getElementById('megaScrim');
+  let megaCloseTimer = null;
+
+  function resetL3Anim(content) {
+    content.querySelectorAll('.mega-l3-item').forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetHeight;
+      el.style.animation = '';
+    });
+  }
+
+  function initCascade(content) {
+    const first = content.querySelector('.mega-l2-item');
+    if (!first) return;
+    content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
+    first.classList.add('active');
+    const key = first.dataset.l3;
+    content.querySelectorAll('.mega-l3-content').forEach(c => c.classList.remove('active'));
+    const l3 = content.querySelector(`.mega-l3-content[data-l3="${key}"]`);
+    if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
+  }
+
+  function openMega(menuKey) {
+    clearTimeout(megaCloseTimer);
+    megaPanel.style.display = 'block';
+    const allContents = megaPanel.querySelectorAll('.mega-content');
+    const target = megaPanel.querySelector(`.mega-content[data-for="${menuKey}"]`);
+    if (!target) return;
+    allContents.forEach(c => { c.classList.remove('active'); c.style.display = 'none'; });
+    requestAnimationFrame(() => {
+      target.classList.add('active');
+      target.style.display = 'block';
+      megaPanel.classList.add('open');
+      megaScrim.classList.add('show');
+      if (menuKey === 'interior') initCascade(target);
+    });
+  }
+
+  function closeMega() {
+    megaCloseTimer = setTimeout(() => {
+      megaPanel.classList.remove('open');
+      megaScrim.classList.remove('show');
+      megaPanel.querySelectorAll('.mega-content').forEach(c => {
+        c.classList.remove('active');
+        c.style.display = 'none';
+      });
+      megaPanel.style.display = 'none';
+    }, 180);
+  }
+
+  navItems.forEach(btn => {
+    const key = btn.dataset.section;
+    if (key === 'facade' || key === 'interior') {
+      btn.addEventListener('mouseenter', () => openMega(key));
+      btn.addEventListener('mouseleave', closeMega);
+    }
+  });
+  megaPanel.addEventListener('mouseenter', () => clearTimeout(megaCloseTimer));
+  megaPanel.addEventListener('mouseleave', closeMega);
+  megaScrim.addEventListener('click', closeMega);
+
+  // L2 hover → switch L3
+  megaPanel.addEventListener('mouseover', e => {
+    const l2 = e.target.closest('.mega-l2-item');
+    if (!l2) return;
+    const content = l2.closest('.mega-content');
+    if (!content || l2.classList.contains('active')) return;
+    content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
+    l2.classList.add('active');
+    const oldL3 = content.querySelector('.mega-l3-content.active');
+    if (oldL3) oldL3.classList.remove('active');
+    const l3 = content.querySelector(`.mega-l3-content[data-l3="${l2.dataset.l3}"]`);
+    if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
+  });
+
+  // Facade mega items → switch section + open modal
+  megaPanel.querySelectorAll('.mega-item[data-modal]').forEach(item => {
+    item.addEventListener('click', () => {
+      closeMega();
+      switchSection('facade');
+      setTimeout(() => openModal(item.dataset.modal), 80);
+    });
+  });
+
+  // Interior L3 items → navigate to overview page
+  megaPanel.querySelectorAll('.mega-l3-item[data-href]').forEach(item => {
+    item.addEventListener('click', () => {
+      closeMega();
+      window.location.href = item.dataset.href;
+    });
   });
 
   // ─── Modal ───────────────────────────────────────────────
@@ -329,3 +431,228 @@
   });
 
 })();
+
+// ═══════════════════════════════════════
+// 室内标准 — Interior Section Logic
+// ═══════════════════════════════════════
+(function () {
+  'use strict';
+
+  let tourInited = false;
+  let observerInited = false;
+
+  // ─── Virtual Tour ──────────────────────────────────────────
+  function initInteriorTour() {
+    if (tourInited) return;
+    tourInited = true;
+
+    const hero    = document.getElementById('int-heroSection');
+    const wrap    = document.getElementById('int-heroPanWrap');
+    const img     = document.getElementById('int-heroImg');
+    const hint    = document.getElementById('int-heroPanHint');
+    const overlay = document.getElementById('int-heroSceneOverlay');
+    if (!hero || !wrap || !img) return;
+
+    const SCENES = [
+      {
+        src: 'assets/interior/展厅全景图.webp',
+        name: '展厅总览',
+        hotspots: [{ x: 63, y: 48, label: '家庭区', to: 1 }]
+      },
+      {
+        src: 'assets/interior/家庭区1.jpeg',
+        name: '家庭区 1',
+        hotspots: [
+          { x: 50, y: 48, label: '洽谈区', to: 2 },
+          { x: 67, y: 48, label: '儿童区', to: 3 },
+          { x: 8,  y: 48, label: '展厅',  to: 0 }
+        ]
+      },
+      {
+        src: 'assets/interior/家庭区2.jpeg',
+        name: '家庭区 2',
+        hotspots: [
+          { x: 50, y: 48, label: '家庭区', to: 1 },
+          { x: 83, y: 48, label: '展厅',   to: 0 }
+        ]
+      },
+      {
+        src: 'assets/interior/儿童区.jpeg',
+        name: '儿童区',
+        hotspots: [{ x: 50, y: 48, label: '返回家庭区', to: 1 }]
+      }
+    ];
+
+    let currentScene = 0, maxPan = 0, currentX = 0, targetX = 0;
+    let dragging = false, startClientX = 0, startPanX = 0, didDrag = false;
+
+    function calcMaxPan() {
+      const r = img.naturalWidth / img.naturalHeight;
+      maxPan = Math.max(0, img.offsetHeight * r - hero.offsetWidth) / 2;
+    }
+    if (img.complete && img.naturalWidth) calcMaxPan();
+    img.addEventListener('load', calcMaxPan);
+    window.addEventListener('resize', calcMaxPan);
+
+    function clamp(v) { return Math.min(maxPan, Math.max(-maxPan, v)); }
+
+    hero.addEventListener('mousedown', e => {
+      if (e.target.closest('.int-hero-hotspot')) return;
+      dragging = true; didDrag = false;
+      startClientX = e.clientX; startPanX = currentX;
+      hero.style.cursor = 'grabbing';
+      if (hint) hint.classList.add('fade-out');
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const d = e.clientX - startClientX;
+      if (Math.abs(d) > 3) didDrag = true;
+      targetX = clamp(startPanX + d);
+    });
+    window.addEventListener('mouseup', () => {
+      if (dragging) { dragging = false; hero.style.cursor = 'grab'; }
+      setTimeout(() => { didDrag = false; }, 10);
+    });
+    hero.addEventListener('touchstart', e => {
+      if (e.target.closest('.int-hero-hotspot')) return;
+      startClientX = e.touches[0].clientX; startPanX = currentX; didDrag = false;
+      if (hint) hint.classList.add('fade-out');
+    }, { passive: true });
+    hero.addEventListener('touchmove', e => {
+      const d = e.touches[0].clientX - startClientX;
+      if (Math.abs(d) > 3) didDrag = true;
+      targetX = clamp(startPanX + d);
+    }, { passive: true });
+
+    function animate() {
+      currentX += (targetX - currentX) * 0.08;
+      wrap.style.transform = 'translateX(calc(-50% + ' + currentX.toFixed(2) + 'px))';
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    function buildHotspots(scene) {
+      wrap.querySelectorAll('.int-hero-hotspot').forEach(el => el.remove());
+      scene.hotspots.forEach(hs => {
+        const el = document.createElement('div');
+        el.className = 'int-hero-hotspot';
+        el.style.cssText = 'left:' + hs.x + '%;top:' + hs.y + '%';
+        el.innerHTML =
+          '<div class="int-hero-hotspot-ring"></div>' +
+          '<div class="int-hero-hotspot-dot"></div>' +
+          '<span class="int-hero-hotspot-label">' + hs.label + '</span>';
+        el.addEventListener('click', () => { if (!didDrag && hs.to != null) loadScene(hs.to); });
+        wrap.appendChild(el);
+      });
+    }
+
+    function loadScene(idx) {
+      if (idx === currentScene) return;
+      overlay.classList.add('active');
+      setTimeout(() => {
+        currentScene = idx;
+        const scene = SCENES[idx];
+        img.src = scene.src;
+        currentX = 0; targetX = 0;
+        buildHotspots(scene);
+        const reveal = () => { calcMaxPan(); setTimeout(() => overlay.classList.remove('active'), 60); };
+        if (img.complete && img.naturalWidth) reveal();
+        else img.onload = reveal;
+      }, 420);
+    }
+
+    buildHotspots(SCENES[0]);
+    hero.style.cursor = 'grab';
+    calcMaxPan();
+  }
+
+  // ─── Fade-up Observer (interior) ───────────────────────────
+  function initInteriorObserver() {
+    if (observerInited) return;
+    observerInited = true;
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('#section-interior .fade-up').forEach(el => obs.observe(el));
+  }
+
+  // ─── Lightbox ───────────────────────────────────────────────
+  const lbOverlay = document.getElementById('intLbOverlay');
+  const lbImg     = document.getElementById('intLbImg');
+  const lbClose   = document.getElementById('intLbClose');
+  const lbPrev    = document.getElementById('intLbPrev');
+  const lbNext    = document.getElementById('intLbNext');
+  const lbCounter = document.getElementById('intLbCounter');
+
+  let lbImages = [], lbIndex = 0;
+
+  function lbOpen(images, idx) {
+    lbImages = images;
+    lbIndex = idx;
+    lbImg.src = images[idx];
+    lbCounter.textContent = (idx + 1) + ' / ' + images.length;
+    lbOverlay.classList.add('active');
+  }
+  function lbGo(delta) {
+    lbIndex = (lbIndex + delta + lbImages.length) % lbImages.length;
+    lbImg.src = lbImages[lbIndex];
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  }
+  function lbClose_fn() { lbOverlay.classList.remove('active'); }
+
+  if (lbClose)   lbClose.addEventListener('click', lbClose_fn);
+  if (lbPrev)    lbPrev.addEventListener('click', () => lbGo(-1));
+  if (lbNext)    lbNext.addEventListener('click', () => lbGo(1));
+  if (lbOverlay) lbOverlay.addEventListener('click', e => { if (e.target === lbOverlay || e.target === lbImg) lbClose_fn(); });
+
+  document.addEventListener('keydown', e => {
+    if (!lbOverlay || !lbOverlay.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  lbGo(-1);
+    if (e.key === 'ArrowRight') lbGo(1);
+    if (e.key === 'Escape')     lbClose_fn();
+  });
+
+  document.querySelectorAll('#section-interior .int-gallery-row').forEach(row => {
+    const cells = row.querySelectorAll('.int-gallery-cell');
+    cells.forEach((cell, idx) => {
+      const imgs = Array.from(cells).map(c => c.querySelector('img').src);
+      cell.addEventListener('click', () => lbOpen(imgs, idx));
+    });
+  });
+
+  // ─── Zone Card Modal ────────────────────────────────────────
+  const zcOverlay = document.getElementById('intZcOverlay');
+  const zcClose   = document.getElementById('intZcClose');
+  const zcImg     = document.getElementById('intZcImg');
+
+  function zcOpen(src) {
+    zcImg.src = src;
+    zcOverlay.classList.add('active');
+  }
+  function zcClose_fn() { zcOverlay.classList.remove('active'); }
+
+  if (zcClose)   zcClose.addEventListener('click', zcClose_fn);
+  if (zcOverlay) zcOverlay.addEventListener('click', e => { if (e.target === zcOverlay) zcClose_fn(); });
+  document.addEventListener('keydown', e => {
+    if (zcOverlay && zcOverlay.classList.contains('active') && e.key === 'Escape') zcClose_fn();
+  });
+
+  const hotspotRetail = document.getElementById('int-hotspot-retail');
+  if (hotspotRetail) {
+    hotspotRetail.addEventListener('click', () => zcOpen('assets/interior/空间构成.jpeg'));
+  }
+
+  // Expose init functions for switchSection
+  window.initInteriorTour     = initInteriorTour;
+  window.initInteriorObserver = initInteriorObserver;
+
+})();
+

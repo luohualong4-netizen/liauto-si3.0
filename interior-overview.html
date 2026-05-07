@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>设计总览 · 理想汽车 SI 3.0 室内标准</title>
+<style>
+@font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Medium.otf') format('opentype');font-weight:normal;font-style:normal;font-display:swap}
+@font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'LiciumFont',-apple-system,sans-serif;background:#fff;color:#0a0a0a;line-height:1.6;overflow-x:hidden;padding-top:52px}
+
+/* ── NAV ── */
+.nav{position:fixed;inset:0 0 auto 0;height:52px;z-index:1000;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:background .3s}
+.nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 40px;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:#0a0a0a;cursor:pointer}
+.nav-brand{font-size:13px;font-weight:700;letter-spacing:.06em;color:#0a0a0a}
+.nav-title{font-size:13px;color:#888;font-weight:400;letter-spacing:-.01em}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#555;text-decoration:none;padding:6px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.1);transition:all .15s;cursor:pointer}
+.nav-back:hover{color:#004724;border-color:rgba(0,71,36,.3);background:rgba(0,71,36,.04)}
+.nav-back svg{transition:transform .15s}
+.nav-back:hover svg{transform:translateX(-2px)}
+
+/* ── LAYOUT ── */
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+img{display:block;max-width:100%;height:auto}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(44px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.fade-up.visible{opacity:1;transform:none}
+[data-delay="1"]{transition-delay:.15s}
+[data-delay="2"]{transition-delay:.3s}
+[data-delay="3"]{transition-delay:.45s}
+[data-delay="4"]{transition-delay:.6s}
+
+/* ── OVERVIEW SECTIONS ── */
+.overview-section{padding:80px 0 100px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
+.overview-section:first-of-type{border-top:none;padding-top:60px}
+.overview-grid{display:grid;grid-template-columns:360px 1fr;gap:60px;align-items:start}
+.overview-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:8px}
+.overview-subtitle{font-size:14px;font-weight:600;color:#666;margin-bottom:20px}
+.overview-bullets{list-style:none;padding:0;margin:0 0 32px}
+.overview-bullets li{font-size:13px;color:#666;line-height:1.85;padding-left:14px;position:relative;margin-bottom:6px}
+.overview-bullets li::before{content:'·';position:absolute;left:0;color:#bbb;font-size:18px;line-height:1.5}
+.overview-bullets li strong{color:#444;font-weight:600}
+.overview-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:22px;display:flex;flex-direction:column;gap:10px}
+.legend-row{display:flex;align-items:center;gap:12px;font-size:13px;color:#555}
+.legend-sw{width:26px;height:12px;border-radius:3px;flex-shrink:0}
+.fl-legend-below{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:14px;border-top:1px solid rgba(0,0,0,.07);margin-top:14px}
+.fl-legend-sym{width:40px;height:12px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-start}
+.fl-zone-list{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;border-top:1px solid rgba(0,0,0,.07);padding-top:18px;margin-bottom:18px}
+.fl-zone-item{font-size:11.5px;color:#666;display:flex;align-items:center;gap:7px;line-height:1.55}
+.fl-zone-num{width:18px;height:18px;border-radius:50%;background:#1a8a70;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── FLOOR PLAN WRAP ── */
+.fp-wrap{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.11),0 4px 16px rgba(0,0,0,.06)}
+.fp-wrap img{display:block;width:100%;height:auto;border-radius:18px}
+.fp-zone-hit{position:absolute;cursor:pointer;border-radius:4px;transition:background .18s}
+.fp-zone-hit:hover{background:rgba(255,255,255,.18)}
+
+/* ── GALLERY ── */
+.gallery-section{padding:80px 0 100px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
+.gallery-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:36px}
+.gallery-row{display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr;gap:6px;margin-bottom:6px}
+.gallery-row:last-child{margin-bottom:0}
+.gallery-label{writing-mode:vertical-lr;font-size:11px;color:#999;letter-spacing:.08em;display:flex;align-items:center;justify-content:center}
+.gallery-cell{border-radius:10px;overflow:hidden;line-height:0;cursor:pointer;position:relative;aspect-ratio:4/3}
+.gallery-cell img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.gallery-cell:hover img{transform:scale(1.03)}
+
+/* ── LIGHTBOX ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.lb-overlay.active{opacity:1;pointer-events:all}
+.lb-img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain;box-shadow:0 32px 96px rgba(0,0,0,.5);user-select:none;width:auto;height:auto;display:block}
+.lb-close{position:fixed;top:22px;right:28px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;transition:background .15s}
+.lb-close:hover{background:rgba(255,255,255,.22)}
+.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;transition:background .15s}
+.lb-arrow:hover{background:rgba(255,255,255,.24)}
+.lb-prev{left:20px}
+.lb-next{right:20px}
+.lb-counter{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.06em}
+
+/* ── STANDARDS INTRO ── */
+.stds-intro{padding:100px 0 60px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
+.big-label{font-size:clamp(72px,9vw,108px);font-weight:900;letter-spacing:-.06em;line-height:.95;color:#0a0a0a;margin-bottom:20px}
+.big-label .dim{color:#e8e8e8}
+.stds-intro-sub{font-size:18px;color:#aaa;line-height:1.75}
+
+/* ── STANDARD SECTIONS ── */
+.std-sec{padding:110px 0;border-top:1px solid #f0f0f0}
+.std-sec:nth-child(odd){background:#fafafa}
+.std-sec:nth-child(even){background:#fff}
+.std-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.std-inner.rev .std-vis{order:2}
+.std-inner.rev .std-text{order:1}
+.std-vis{border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#f0ece5;display:flex;align-items:center;justify-content:center;position:relative}
+.std-diagram{width:100%;height:auto;display:block}
+.vis-num{position:absolute;bottom:-12px;right:-8px;font-size:140px;font-weight:900;letter-spacing:-.06em;line-height:1;color:rgba(0,0,0,.05);user-select:none}
+.std-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
+.std-badge-dot{width:5px;height:5px;border-radius:50%}
+.std-idx{font-size:11px;color:#ccc;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px;display:block}
+.std-title{font-size:clamp(30px,3.2vw,44px);font-weight:800;letter-spacing:-.04em;line-height:1.1;color:#0a0a0a;margin-bottom:10px}
+.std-subtitle{font-size:17px;font-weight:500;color:#555;margin-bottom:16px}
+.std-desc{font-size:15px;color:#777;line-height:1.85;margin-bottom:30px}
+.principles{margin-bottom:28px}
+.principle{display:flex;gap:12px;margin-bottom:13px;font-size:14px;color:#555;line-height:1.75}
+.p-num{width:20px;height:20px;border-radius:50%;background:#1c5c35;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:2px}
+.specs{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #f0f0f0;margin-bottom:8px}
+.spec-it{padding:14px 0;border-bottom:1px solid #f0f0f0}
+.spec-lbl{font-size:11px;color:#c0c0c0;letter-spacing:.04em;margin-bottom:5px}
+.spec-val{font-size:15px;font-weight:700;color:#0a0a0a}
+.std-table{width:100%;border-collapse:collapse;font-size:13px}
+.std-table th{padding:11px 0;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c0c0c0;border-bottom:1px solid #f0f0f0;text-align:left}
+.std-table td{padding:13px 0;border-bottom:1px solid #f0f0f0;color:#444}
+.std-table td:last-child{font-weight:600;color:#0a0a0a}
+.std-table tr:last-child td{border-bottom:none}
+.dim{display:inline-block;background:#edf5ed;color:#1a5028;padding:1px 8px;border-radius:4px;font-size:11.5px;font-weight:600}
+.callout{background:#fffbf4;border-left:3px solid #c8893c;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:26px;font-size:14px;color:#777;line-height:1.8}
+
+/* ── ZONE CARD MODAL ── */
+.zc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.zc-overlay.active{opacity:1;pointer-events:all}
+.zc-card{background:#fff;border-radius:20px;max-width:1100px;width:100%;max-height:90vh;overflow:hidden;position:relative;box-shadow:0 48px 120px rgba(0,0,0,.3)}
+.zc-card img{display:block;width:100%;height:auto;max-height:90vh;object-fit:contain;border-radius:20px}
+.zc-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;font-size:15px;color:#555;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10}
+.zc-close:hover{background:rgba(0,0,0,.16)}
+
+/* ── FOOTER ── */
+footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(0,0,0,.06)}
+.footer-copy{font-size:12px;color:#bbb;letter-spacing:.01em}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <svg width="54" height="22" viewBox="0 0 49 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#111110" d="M38.3666 0.736389L43.2286 9.57411H28.2074L23.3684 0.736389H38.3666ZM24.1257 11.0241C22.4057 11.0241 20.617 10.8629 19.5162 9.91939C18.5987 9.20598 18.0941 8.37744 17.5667 7.43397C17.452 7.24681 16.1277 4.82963 15.106 2.96474L15.1055 2.96381C14.4929 1.84564 13.9891 0.926227 13.9204 0.80549H0C0.500179 1.7225 1.00036 2.64336 1.5011 3.56527L1.50114 3.56535L1.50117 3.56539C2.72228 5.81354 3.94676 8.06789 5.1828 10.2876C6.69629 13.0494 8.14103 15.6273 10.7783 17.5144C12.0399 18.4577 13.3698 19.0794 14.9294 19.4707C16.4659 19.839 18.0254 19.8849 19.6076 19.8849H31.9917L27.1299 11.0241H24.1257ZM29.0105 11.0011L33.8725 19.8849H48.8707L43.9857 11.0011H29.0105Z"/>
+      </svg>
+      <span class="nav-brand">SI 3.0</span>
+    </a>
+    <span class="nav-title">室内设计原则</span>
+    <a class="nav-back" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      返回首页
+    </a>
+  </div>
+</nav>
+
+<!-- ═══ 空间构成 ═══ -->
+<section class="overview-section" id="floor-plan">
+  <div class="container">
+    <div class="overview-grid">
+      <div class="fade-up" style="align-self:start">
+        <h2 class="overview-title">空间构成</h2>
+        <p class="overview-subtitle">综合中心</p>
+        <ul class="overview-bullets">
+          <li>考虑布局时，在结构框架之间划分网格线，理想空间的功能布局应在网格中布置；</li>
+          <li><strong>零售区域：</strong>位于设施前端，需开放、通透，便于产品展示；</li>
+          <li><strong>交付区域：</strong>包含交付大厅、交车工位区和后场区，交付中心位于展厅侧后方，需与零售区相通；</li>
+          <li><strong>服务区域：</strong>包含服务大厅和后场区，位于展厅侧后方，需与零售区相通，有独立的对外主入口；</li>
+          <li><strong>共用区域：</strong>三端共用，设置于三端便捷可达处；</li>
+          <li><strong>后场区：</strong>三端共用，提供办公、仓储等功能需求；</li>
+          <li>分区面积占比仅供参考，根据项目需求动态调整；</li>
+          <li>特殊情况：以上为符合大部分项目的标准情况，个别案例无法覆盖上述类型时，需根据项目情况单独讨论。</li>
+        </ul>
+        <div class="overview-legend">
+          <div class="legend-row"><div class="legend-sw" style="background:#1a8a70"></div><span>零售中心 ≈ 35%</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#d8906a"></div><span>共用区域 ≈ 10%</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#5abab0"></div><span>交付中心 ≈ 8%</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#8cc4bc"></div><span>服务中心 ≈ 8%</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#6888a0"></div><span>交车工位区 ≈ 28%</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#a8b2b8"></div><span>后场区 ≈ 11%</span></div>
+        </div>
+      </div>
+      <div class="fade-up" data-delay="1">
+        <div class="fp-wrap">
+          <img src="assets/interior/空间构成.jpeg" alt="空间构成平面图">
+          <div class="fp-zone-hit" id="hotspot-retail" style="left:14%;top:10%;width:25%;height:80%"></div>
+        </div>
+        <p style="text-align:center;font-size:12px;color:#bbb;margin-top:14px;letter-spacing:.03em">点击颜色区域查看设计细则</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 功能布局 ═══ -->
+<section class="overview-section">
+  <div class="container">
+    <div class="overview-grid">
+      <div class="fade-up" style="align-self:start">
+        <h2 class="overview-title">功能布局</h2>
+        <ul class="overview-bullets">
+          <li>三端开放融合，但交付和服务需要分隔无交叉；</li>
+          <li><strong>零售端：</strong>靠近场地主人流方向，是用户最便捷触达区域；</li>
+          <li><strong>交付端：</strong>应有独立对外入口，靠近入口布置交付接待，业务办公区应面向客流方向布置，内部动线清晰；交车工位入口靠近业务办理区设置；</li>
+          <li><strong>服务端：</strong>服务入口设置于接车通道内，服务接待区和洽谈区应面向客流方向布置，洽谈室尽量远离客休区布置；</li>
+          <li><strong>共用空间：</strong>尽可能在中心，方便三端使用；</li>
+          <li><strong>后场区：</strong>用户不可达区，优先人员办公，动线贴合后台流程。</li>
+        </ul>
+        <div class="fl-zone-list">
+          <div class="fl-zone-item"><div class="fl-zone-num">01</div>前厅接待</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">15</div>茶水柜</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">02</div>展车区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">16</div>家庭区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">03</div>纯电展墙区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">17</div>儿童区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">04</div>增程展墙区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">18</div>洽谈室A（圆桌）</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">05</div>IP展墙区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">19</div>卫生间</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">06</div>洽谈区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">20</div>母婴室</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">07</div>交付接待区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">21</div>清洁间</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">08</div>交付洽谈区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">22</div>服务办公室（12工位）</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">09</div>交付业务办理区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">23</div>交付办公室（27工位）</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">10</div>交车工位区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">24</div>财务办公室</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">11</div>服务接待区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">25</div>临牌办公室</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">12</div>服务客休区</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">26</div>储藏间</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">13</div>洽谈室B（沙发）</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">27</div>强、弱电间</div>
+          <div class="fl-zone-item"><div class="fl-zone-num">14</div>选配洽谈区</div>
+          <div class="fl-zone-item"></div>
+        </div>
+      </div>
+      <div class="fade-up" data-delay="1">
+        <div class="fp-wrap">
+          <img src="assets/interior/功能布局.jpeg" alt="功能布局平面图">
+        </div>
+        <div class="fl-legend-below">
+          <div class="legend-row"><div class="legend-sw" style="background:#f0ebe0;border:1px solid #ddd"></div><span>零售区域</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#8ecfca"></div><span>交付区域</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#b8d8d5"></div><span>服务区域</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#f0e6cc;border:1px solid #ddd"></div><span>共用区域</span></div>
+          <div class="legend-row"><div class="legend-sw" style="background:#c4c8cc"></div><span>后场区</span></div>
+          <div class="legend-row">
+            <div class="fl-legend-sym"><svg width="40" height="12" viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="28" y2="6" stroke="#e8a870" stroke-width="1.5" stroke-dasharray="3,2"/><polygon points="28,2 40,6 28,10" fill="#e8a870"/></svg></div>
+            <span>主动线</span>
+          </div>
+          <div class="legend-row">
+            <div class="fl-legend-sym"><svg width="16" height="14" viewBox="0 0 16 14" fill="none"><polygon points="8,0 16,14 0,14" fill="#1a8a70"/></svg></div>
+            <span>出入口</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 空间材质 ═══ -->
+<section class="overview-section">
+  <div class="container">
+    <div class="overview-grid">
+      <div class="fade-up" style="align-self:start">
+        <h2 class="overview-title">空间材质</h2>
+        <ul class="overview-bullets">
+          <li>图示为材质产生与赋能空间的过程，选用符合灵感定义的材质，营造家庭的、温暖的体验氛围；</li>
+          <li><strong>材质定位：</strong>地面大面积采用仿水磨石瓷砖，天花采用白色，局部空间采用胡桃木色点缀。</li>
+        </ul>
+      </div>
+      <div></div>
+    </div>
+    <div class="fp-wrap fade-up" style="margin-top:40px">
+      <img src="assets/interior/空间材质.jpeg" alt="空间材质">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 效果总览 ═══ -->
+<section class="gallery-section">
+  <div class="container">
+    <h2 class="gallery-title fade-up">效果总览</h2>
+    <div class="gallery-row fade-up">
+      <div class="gallery-label">零售</div>
+      <div class="gallery-cell"><img src="assets/interior/总览1.png" alt="零售1"></div>
+      <div class="gallery-cell"><img src="assets/interior/总览2.png" alt="零售2"></div>
+      <div class="gallery-cell"><img src="assets/interior/总览3.png" alt="零售3"></div>
+      <div class="gallery-cell"><img src="assets/interior/总览4.png" alt="零售4"></div>
+    </div>
+    <div class="gallery-row fade-up">
+      <div class="gallery-label">交付</div>
+      <div class="gallery-cell"><img src="assets/interior/交付1.png" alt="交付1"></div>
+      <div class="gallery-cell"><img src="assets/interior/交付2.png" alt="交付2"></div>
+      <div class="gallery-cell"><img src="assets/interior/交付3.png" alt="交付3"></div>
+      <div class="gallery-cell"><img src="assets/interior/交付4.png" alt="交付4"></div>
+    </div>
+    <div class="gallery-row fade-up">
+      <div class="gallery-label">服务</div>
+      <div class="gallery-cell"><img src="assets/interior/服务1.png" alt="服务1"></div>
+      <div class="gallery-cell"><img src="assets/interior/服务2.png" alt="服务2"></div>
+      <div class="gallery-cell"><img src="assets/interior/服务3.png" alt="服务3"></div>
+      <div class="gallery-cell"><img src="assets/interior/服务4.png" alt="服务4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STANDARDS INTRO ═══ -->
+<section class="stds-intro">
+  <div class="container">
+    <p class="big-label"><span class="dim">S.</span>02–13</p>
+    <p class="stds-intro-sub">以下列出 12 项关键室内设计标准，覆盖零售、服务与交付三大功能区。</p>
+  </div>
+</section>
+
+<!-- S-02 室内展车区 -->
+<section class="std-sec" id="s-2">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="20" y="20" width="280" height="200" rx="6" fill="#f4f0e8" stroke="#e0d8cc" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <rect x="100" y="80" width="120" height="80" rx="10" fill="#c8893c" opacity=".18"/>
+          <rect x="110" y="92" width="100" height="56" rx="7" fill="#c8893c" opacity=".7"/>
+          <circle cx="110" cy="120" r="30" fill="none" stroke="#1c5c35" stroke-width="1.5" stroke-dasharray="3,2" opacity=".5"/>
+          <circle cx="210" cy="120" r="30" fill="none" stroke="#1c5c35" stroke-width="1.5" stroke-dasharray="3,2" opacity=".5"/>
+          <text x="160" y="124" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="LiciumFont">360°</text>
+          <text x="160" y="136" text-anchor="middle" fill="white" font-size="7" font-family="LiciumFont">环绕通道</text>
+        </svg>
+        <div class="vis-num">02</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#fdf3e6;color:#c8893c"><span class="std-badge-dot" style="background:#c8893c"></span>零售中心</div>
+        <span class="std-idx">标准 02 · 室内展车区</span>
+        <h3 class="std-title">保证客户<br/>360° 环绕体验</h3>
+        <p class="std-subtitle">室内展区布局原则</p>
+        <div class="callout">展车应位于零售中心核心可视区域，确保客户进门即看到主力展车，形成强烈品牌视觉冲击。</div>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">W 系最小展示面积</div><div class="spec-val">24 ㎡</div></div>
+          <div class="spec-it"><div class="spec-lbl">W 系推荐展示面积</div><div class="spec-val">36 ㎡</div></div>
+          <div class="spec-it"><div class="spec-lbl">环绕通道净宽</div><div class="spec-val">≥ 1800mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">展车与固定装置</div><div class="spec-val">≥ 600mm</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-03 接待台 -->
+<section class="std-sec" id="s-3">
+  <div class="container">
+    <div class="std-inner fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="40" y="100" width="240" height="60" rx="6" fill="#1c5c35" opacity=".15"/>
+          <rect x="40" y="100" width="240" height="60" rx="6" fill="none" stroke="#1c5c35" stroke-width="1.5"/>
+          <rect x="20" y="80" width="14" height="100" rx="4" fill="#1c5c35" opacity=".25"/>
+          <text x="160" y="135" text-anchor="middle" fill="#1c5c35" font-size="10" font-weight="700" font-family="LiciumFont">LIXIANG</text>
+          <line x1="40" y1="160" x2="40" y2="190" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="280" y1="160" x2="280" y2="190" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="40" y1="182" x2="280" y2="182" stroke="#aaa" stroke-width="1.5"/>
+          <text x="160" y="200" text-anchor="middle" fill="#888" font-size="9" font-family="LiciumFont">2400 ~ 3600mm</text>
+          <line x1="40" y1="100" x2="20" y2="100" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="40" y1="160" x2="20" y2="160" stroke="#ccc" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="28" y1="100" x2="28" y2="160" stroke="#aaa" stroke-width="1.5"/>
+          <text x="14" y="134" text-anchor="middle" fill="#888" font-size="9" font-family="LiciumFont" transform="rotate(-90,14,134)">1050mm</text>
+        </svg>
+        <div class="vis-num">03</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#fdf3e6;color:#c8893c"><span class="std-badge-dot" style="background:#c8893c"></span>零售中心</div>
+        <span class="std-idx">标准 03 · 接待台</span>
+        <h3 class="std-title">首个触达节点<br/>传递品牌温度</h3>
+        <p class="std-subtitle">接待台尺寸与材料规范</p>
+        <p class="std-desc">接待台是客户进入后的首个触达节点，需同时传递品牌专业感与亲切温度。</p>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">台面长度</div><div class="spec-val">2400–3600mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">台面宽度</div><div class="spec-val">600–800mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">外侧台面高度</div><div class="spec-val">1050mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">内侧工作高度</div><div class="spec-val">720mm</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-04 VIP 洽谈室 -->
+<section class="std-sec" id="s-4">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="30" y="30" width="260" height="180" rx="8" fill="#f4f0e8" stroke="#ccc" stroke-width="1.5"/>
+          <rect x="80" y="80" width="160" height="80" rx="5" fill="#c8893c" opacity=".12" stroke="#c8893c" stroke-width="1" stroke-dasharray="3,2"/>
+          <rect x="95" y="95" width="130" height="50" rx="4" fill="none" stroke="#888" stroke-width="1"/>
+          <circle cx="80" cy="106" r="8" fill="#888" opacity=".4"/>
+          <circle cx="80" cy="134" r="8" fill="#888" opacity=".4"/>
+          <circle cx="240" cy="106" r="8" fill="#888" opacity=".4"/>
+          <circle cx="240" cy="134" r="8" fill="#888" opacity=".4"/>
+          <circle cx="145" cy="80" r="8" fill="#888" opacity=".4"/>
+          <circle cx="175" cy="80" r="8" fill="#888" opacity=".4"/>
+          <text x="160" y="125" text-anchor="middle" fill="#999" font-size="9" font-family="LiciumFont">1800×900mm</text>
+        </svg>
+        <div class="vis-num">04</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#fdf3e6;color:#c8893c"><span class="std-badge-dot" style="background:#c8893c"></span>零售中心</div>
+        <span class="std-idx">标准 04 · VIP 洽谈室</span>
+        <h3 class="std-title">为高净值客户<br/>创造私密空间</h3>
+        <p class="std-subtitle">VIP 洽谈室空间要求</p>
+        <div class="principles">
+          <div class="principle"><div class="p-num">①</div><span>净面积 ≥ 20㎡，层高 ≥ 2.8m</span></div>
+          <div class="principle"><div class="p-num">②</div><span>设独立进出口，与展厅区域分离保证私密性</span></div>
+          <div class="principle"><div class="p-num">③</div><span>墙面采用吸音材料，混响时间 0.3–0.5s</span></div>
+          <div class="principle"><div class="p-num">④</div><span>配备多媒体系统、电动窗帘及独立空调</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-05 & S-06 洽谈区 -->
+<section class="std-sec" id="s-5">
+  <div id="s-6" style="position:absolute;top:-80px"></div>
+  <div class="container">
+    <div class="std-inner fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <circle cx="100" cy="120" r="36" fill="#f0e8d8" stroke="#c8a870" stroke-width="1.5"/>
+          <circle cx="100" cy="84" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="100" cy="156" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="64" cy="120" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="136" cy="120" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="220" cy="120" r="36" fill="#f0e8d8" stroke="#c8a870" stroke-width="1.5"/>
+          <circle cx="220" cy="84" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="220" cy="156" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="184" cy="120" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="256" cy="120" r="12" fill="#d4bc98" stroke="#c8a870" stroke-width="1"/>
+          <line x1="148" y1="100" x2="172" y2="100" stroke="#ddd" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="160" y="220" text-anchor="middle" fill="#bbb" font-size="9" font-family="LiciumFont">间距 ≥ 1200mm</text>
+        </svg>
+        <div class="vis-num">05</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#fdf3e6;color:#c8893c"><span class="std-badge-dot" style="background:#c8893c"></span>零售中心</div>
+        <span class="std-idx">标准 05–06 · 洽谈区（圆桌）</span>
+        <h3 class="std-title">营造轻松愉悦<br/>的成交氛围</h3>
+        <p class="std-subtitle">洽谈区布置原则</p>
+        <p class="std-desc">洽谈区应与展车区保持视线通透，多个独立洽谈单元排布，避免相互干扰。</p>
+        <table class="std-table">
+          <thead><tr><th>场景</th><th>舒适净距</th></tr></thead>
+          <tbody>
+            <tr><td>洽谈组与展车</td><td><span class="dim">2500mm</span></td></tr>
+            <tr><td>洽谈组与墙面</td><td><span class="dim">1200mm</span></td></tr>
+            <tr><td>洽谈组间距</td><td><span class="dim">1500mm</span></td></tr>
+            <tr><td>圆桌直径</td><td><span class="dim">900–1100mm</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-07 会议桌 -->
+<section class="std-sec" id="s-7">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="50" y="90" width="220" height="60" rx="6" fill="#e8e0cc" stroke="#b8a880" stroke-width="1.5"/>
+          <rect x="60" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="84" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="108" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="132" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="156" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="180" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="204" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="228" y="72" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="60" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="84" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="108" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="132" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="156" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="180" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="204" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="228" y="154" width="14" height="14" rx="3" fill="#b8a880" opacity=".7"/>
+          <rect x="274" y="100" width="18" height="40" rx="4" fill="#aaa" opacity=".4"/>
+          <text x="160" y="126" text-anchor="middle" fill="#999" font-size="9" font-family="LiciumFont">多功能会议桌</text>
+        </svg>
+        <div class="vis-num">07</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#fdf3e6;color:#c8893c"><span class="std-badge-dot" style="background:#c8893c"></span>零售中心</div>
+        <span class="std-idx">标准 07 · 多功能会议桌区</span>
+        <h3 class="std-title">兼顾演示<br/>与集体讨论</h3>
+        <p class="std-subtitle">会议桌尺寸与配置要求</p>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">桌面长度</div><div class="spec-val">2400–3600mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">桌面宽度</div><div class="spec-val">1000–1200mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">座椅间距</div><div class="spec-val">≥ 700mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">主屏幕尺寸</div><div class="spec-val">≥ 75寸 4K</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-08 服务工作站 -->
+<section class="std-sec" id="s-8">
+  <div class="container">
+    <div class="std-inner fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="30" y="60" width="70" height="120" rx="5" fill="#ddd0a0" stroke="#a89040" stroke-width="1.2" opacity=".8"/>
+          <rect x="112" y="60" width="70" height="120" rx="5" fill="#ddd0a0" stroke="#a89040" stroke-width="1.2" opacity=".8"/>
+          <rect x="194" y="60" width="70" height="120" rx="5" fill="#ddd0a0" stroke="#a89040" stroke-width="1.2" opacity=".8"/>
+          <rect x="30" y="190" width="234" height="8" rx="2" fill="#1c5c35" opacity=".3"/>
+          <text x="65" y="128" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">工位 1</text>
+          <text x="147" y="128" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">工位 2</text>
+          <text x="229" y="128" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">工位 3</text>
+          <line x1="30" y1="50" x2="264" y2="50" stroke="#ccc" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="147" y="44" text-anchor="middle" fill="#bbb" font-size="8" font-family="LiciumFont">品牌绿色标准色背板</text>
+        </svg>
+        <div class="vis-num">08</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#f8f5e0;color:#8a7a20"><span class="std-badge-dot" style="background:#8a7a20"></span>服务中心</div>
+        <span class="std-idx">标准 08 · 服务顾问工作站</span>
+        <h3 class="std-title">效率与整洁感<br/>并行兼顾</h3>
+        <p class="std-subtitle">工作站布局与设备配置</p>
+        <p class="std-desc">工作站面向服务等候区，顾问与等候客户保持自然视线接触，提升服务响应效率。</p>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">单工位宽度</div><div class="spec-val">≥ 1200mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">单工位深度</div><div class="spec-val">≥ 700mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">隔断高度</div><div class="spec-val">≤ 1200mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">背板颜色</div><div class="spec-val">品牌绿 SI</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-09 内部会议室 -->
+<section class="std-sec" id="s-9">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="40" y="30" width="240" height="180" rx="8" fill="#f4f0e8" stroke="#ccc" stroke-width="1.5"/>
+          <rect x="60" y="50" width="200" height="140" rx="5" fill="none" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+          <rect x="80" y="90" width="160" height="50" rx="4" fill="#e8e0d0" stroke="#c0b898" stroke-width="1"/>
+          <text x="160" y="120" text-anchor="middle" fill="#888" font-size="9" font-family="LiciumFont">2400×1000mm</text>
+          <rect x="264" y="70" width="8" height="100" rx="2" fill="#888" opacity=".4"/>
+          <text x="272" y="124" fill="#bbb" font-size="8" font-family="LiciumFont">显示屏</text>
+          <text x="160" y="220" text-anchor="middle" fill="#bbb" font-size="8" font-family="LiciumFont">净面积 ≥ 15㎡ · 隔音 Rw ≥ 40dB</text>
+        </svg>
+        <div class="vis-num">09</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#f8f5e0;color:#8a7a20"><span class="std-badge-dot" style="background:#8a7a20"></span>服务中心</div>
+        <span class="std-idx">标准 09 · 内部会议室</span>
+        <h3 class="std-title">满足视频会议<br/>与培训需求</h3>
+        <p class="std-subtitle">会议室空间标准</p>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">净面积</div><div class="spec-val">≥ 15 ㎡</div></div>
+          <div class="spec-it"><div class="spec-lbl">层高</div><div class="spec-val">≥ 2.6m</div></div>
+          <div class="spec-it"><div class="spec-lbl">隔音指数</div><div class="spec-val">Rw ≥ 40dB</div></div>
+          <div class="spec-it"><div class="spec-lbl">桌面照度</div><div class="spec-val">500 lx</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-10 客户等候区 -->
+<section class="std-sec" id="s-10">
+  <div class="container">
+    <div class="std-inner fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="30" y="80" width="80" height="80" rx="10" fill="#f0e8d8" stroke="#c8a870" stroke-width="1.2"/>
+          <rect x="50" y="94" width="40" height="52" rx="6" fill="#d4bc98" opacity=".6"/>
+          <rect x="130" y="80" width="80" height="80" rx="10" fill="#f0e8d8" stroke="#c8a870" stroke-width="1.2"/>
+          <rect x="150" y="94" width="40" height="52" rx="6" fill="#d4bc98" opacity=".6"/>
+          <circle cx="77" cy="72" r="8" fill="#e8dcc8" stroke="#c8a870" stroke-width="1"/>
+          <circle cx="177" cy="72" r="8" fill="#e8dcc8" stroke="#c8a870" stroke-width="1"/>
+          <rect x="234" y="60" width="56" height="160" rx="6" fill="#1c5c35" opacity=".12" stroke="#1c5c35" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="262" y="144" text-anchor="middle" fill="#1c5c35" font-size="8" font-family="LiciumFont" opacity=".7">进度看板</text>
+          <rect x="30" y="174" width="80" height="6" rx="3" fill="#ccc" opacity=".5"/>
+          <rect x="130" y="174" width="80" height="6" rx="3" fill="#ccc" opacity=".5"/>
+        </svg>
+        <div class="vis-num">10</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#f8f5e0;color:#8a7a20"><span class="std-badge-dot" style="background:#8a7a20"></span>服务中心</div>
+        <span class="std-idx">标准 10 · 客户等候区</span>
+        <h3 class="std-title">让等待也成为<br/>品牌体验</h3>
+        <p class="std-subtitle">等候区布置原则与配置</p>
+        <div class="callout">数字化进度看板显示维修/交付进度，减少等候焦虑感，配置充电桩、免费 WiFi 及饮品台。</div>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">座位数</div><div class="spec-val">工位数 × 1.5</div></div>
+          <div class="spec-it"><div class="spec-lbl">显示屏尺寸</div><div class="spec-val">≥ 55寸 LED</div></div>
+          <div class="spec-it"><div class="spec-lbl">照明色温</div><div class="spec-val">3000K</div></div>
+          <div class="spec-it"><div class="spec-lbl">照度</div><div class="spec-val">≥ 200 lx</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-11 配件展示区 -->
+<section class="std-sec" id="s-11">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="50" y="30" width="30" height="180" rx="4" fill="#e0dcd4" stroke="#aca8a0" stroke-width="1.2"/>
+          <rect x="90" y="30" width="30" height="180" rx="4" fill="#e0dcd4" stroke="#aca8a0" stroke-width="1.2"/>
+          <rect x="130" y="30" width="30" height="180" rx="4" fill="#e0dcd4" stroke="#aca8a0" stroke-width="1.2"/>
+          <rect x="180" y="90" width="90" height="50" rx="6" fill="#e0dcd4" stroke="#aca8a0" stroke-width="1.2"/>
+          <line x1="50" y1="100" x2="80" y2="100" stroke="#888" stroke-width="1" stroke-dasharray="2,2" opacity=".5"/>
+          <line x1="90" y1="100" x2="120" y2="100" stroke="#888" stroke-width="1" stroke-dasharray="2,2" opacity=".5"/>
+          <line x1="130" y1="100" x2="160" y2="100" stroke="#888" stroke-width="1" stroke-dasharray="2,2" opacity=".5"/>
+          <text x="225" y="120" text-anchor="middle" fill="#888" font-size="9" font-family="LiciumFont">重点展品台</text>
+          <text x="115" y="220" text-anchor="middle" fill="#bbb" font-size="8" font-family="LiciumFont">展示架 1200×400×2000mm</text>
+        </svg>
+        <div class="vis-num">11</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#f5f5f3;color:#6b6860"><span class="std-badge-dot" style="background:#6b6860"></span>辅助空间</div>
+        <span class="std-idx">标准 11 · 配件与精品展示区</span>
+        <h3 class="std-title">提升客单价<br/>延伸品牌价值</h3>
+        <p class="std-subtitle">配件展示陈列原则</p>
+        <div class="principles">
+          <div class="principle"><div class="p-num">①</div><span>展示区面积 ≥ 15㎡，货架单元化模块管理</span></div>
+          <div class="principle"><div class="p-num">②</div><span>重点配件置于视线高度 1000–1600mm 处</span></div>
+          <div class="principle"><div class="p-num">③</div><span>统一品牌价格标签，禁止手写标签</span></div>
+          <div class="principle"><div class="p-num">④</div><span>配置智能试装体验台（虚拟预览）</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-12 交付仪式区 -->
+<section class="std-sec" id="s-12">
+  <div class="container">
+    <div class="std-inner fade-up">
+      <div class="std-vis" style="background:#0c1810">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="0" y="0" width="320" height="240" fill="#0c1810"/>
+          <rect x="30" y="30" width="260" height="120" rx="6" fill="none" stroke="#1c5c35" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>
+          <rect x="30" y="160" width="260" height="6" rx="2" fill="none" stroke="#1c5c35" stroke-width="1" opacity=".3"/>
+          <text x="160" y="65" text-anchor="middle" fill="#4a9c62" font-size="28" font-weight="800" font-family="LiciumFont" opacity=".9">LIXIANG</text>
+          <text x="160" y="88" text-anchor="middle" fill="rgba(255,255,255,.35)" font-size="10" font-family="LiciumFont">交付仪式背景墙</text>
+          <rect x="80" y="100" width="160" height="40" rx="6" fill="#1c5c35" opacity=".4"/>
+          <text x="160" y="125" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="10" font-family="LiciumFont" font-weight="600">交付车辆位</text>
+          <text x="160" y="208" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="9" font-family="LiciumFont">背景墙 ≥ 4000×2400mm</text>
+        </svg>
+        <div class="vis-num" style="color:rgba(255,255,255,.05)">12</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#ebf4eb;color:#1c5c35"><span class="std-badge-dot" style="background:#1c5c35"></span>交付中心</div>
+        <span class="std-idx">标准 12 · 交付仪式区</span>
+        <h3 class="std-title">品牌情感联结<br/>最重要的时刻</h3>
+        <p class="std-subtitle">交付仪式区布置规范</p>
+        <p class="std-desc">交付仪式区须预留足够空间容纳客户家庭成员，每车交付位净面积 ≥ 40㎡，设置专属拍照背景墙。</p>
+        <div class="specs">
+          <div class="spec-it"><div class="spec-lbl">交付位净宽</div><div class="spec-val">≥ 5000mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">交付位净深</div><div class="spec-val">≥ 7500mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">背景墙尺寸</div><div class="spec-val">≥ 4000×2400mm</div></div>
+          <div class="spec-it"><div class="spec-lbl">拍照灯光色温</div><div class="spec-val">3200K 可调</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S-13 交付准备区 -->
+<section class="std-sec" id="s-13">
+  <div class="container">
+    <div class="std-inner rev fade-up">
+      <div class="std-vis">
+        <svg class="std-diagram" viewBox="0 0 320 240" fill="none">
+          <rect x="20" y="60" width="84" height="120" rx="6" fill="#e5e0d5" stroke="#c0b8a8" stroke-width="1.2"/>
+          <rect x="28" y="72" width="68" height="96" rx="4" fill="#ccc4b0" opacity=".5"/>
+          <rect x="118" y="60" width="84" height="120" rx="6" fill="#e5e0d5" stroke="#c0b8a8" stroke-width="1.2"/>
+          <rect x="126" y="72" width="68" height="96" rx="4" fill="#ccc4b0" opacity=".5"/>
+          <rect x="216" y="60" width="84" height="120" rx="6" fill="#e5e0d5" stroke="#c0b8a8" stroke-width="1.2"/>
+          <rect x="224" y="72" width="68" height="96" rx="4" fill="#ccc4b0" opacity=".5"/>
+          <text x="62" y="135" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">PDI</text>
+          <text x="160" y="135" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">清洁</text>
+          <text x="258" y="135" text-anchor="middle" fill="#888" font-size="8" font-family="LiciumFont">临停</text>
+          <line x1="20" y1="50" x2="300" y2="50" stroke="#1c5c35" stroke-width="1.5" stroke-dasharray="4,3" opacity=".4"/>
+          <text x="160" y="44" text-anchor="middle" fill="#1c5c35" font-size="8" font-family="LiciumFont" opacity=".6">地面标线明确区分各功能区</text>
+        </svg>
+        <div class="vis-num">13</div>
+      </div>
+      <div class="std-text">
+        <div class="std-badge" style="background:#ebf4eb;color:#1c5c35"><span class="std-badge-dot" style="background:#1c5c35"></span>交付中心</div>
+        <span class="std-idx">标准 13 · 交付准备区</span>
+        <h3 class="std-title">PDI 检查与<br/>交付流程保障</h3>
+        <p class="std-subtitle">交付准备区划分与设备配置</p>
+        <div class="principles">
+          <div class="principle"><div class="p-num">①</div><span>PDI 检查区、清洁区、临停区须地面标线明确区分</span></div>
+          <div class="principle"><div class="p-num">②</div><span>单车操作位净宽 ≥ 3500mm，净深 ≥ 7000mm</span></div>
+          <div class="principle"><div class="p-num">③</div><span>区域内配置防滑地坪（R11 标准）</span></div>
+          <div class="principle"><div class="p-num">④</div><span>配置充电桩 ≥ 7kW 及补能连接工具存放架</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy">© 2026 理想汽车 · 空间设计标准 SI 3.0</span>
+</footer>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lb-overlay" id="lbOverlay">
+  <button class="lb-close" id="lbClose">&#x2715;</button>
+  <button class="lb-arrow lb-prev" id="lbPrev">&#8249;</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <button class="lb-arrow lb-next" id="lbNext">&#8250;</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<!-- ═══ ZONE CARD MODAL ═══ -->
+<div class="zc-overlay" id="zcOverlay">
+  <div class="zc-card">
+    <button class="zc-close" id="zcClose">&#x2715;</button>
+    <img src="assets/interior/空间构成.jpeg" alt="空间构成设计细则">
+  </div>
+</div>
+
+<script>
+// Scroll animations
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// Nav scroll tint
+window.addEventListener('scroll', () => {
+  document.querySelector('.nav').style.background =
+    window.scrollY > 20 ? 'rgba(255,255,255,.97)' : 'rgba(255,255,255,.92)';
+}, { passive: true });
+
+// Lightbox
+const lbOverlay = document.getElementById('lbOverlay');
+const lbImg     = document.getElementById('lbImg');
+const lbClose   = document.getElementById('lbClose');
+const lbPrev    = document.getElementById('lbPrev');
+const lbNext    = document.getElementById('lbNext');
+const lbCounter = document.getElementById('lbCounter');
+let lbImages = [], lbIndex = 0;
+
+function lbShow(idx) {
+  lbIndex = (idx + lbImages.length) % lbImages.length;
+  lbImg.src = lbImages[lbIndex];
+  lbCounter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+}
+
+document.querySelectorAll('.gallery-row').forEach(row => {
+  const cells = row.querySelectorAll('.gallery-cell');
+  cells.forEach((cell, i) => {
+    cell.addEventListener('click', () => {
+      lbImages = Array.from(cells).map(c => c.querySelector('img').src);
+      lbOverlay.classList.add('active');
+      lbShow(i);
+    });
+  });
+});
+
+lbClose.addEventListener('click', () => lbOverlay.classList.remove('active'));
+lbPrev.addEventListener('click', () => lbShow(lbIndex - 1));
+lbNext.addEventListener('click', () => lbShow(lbIndex + 1));
+lbOverlay.addEventListener('click', e => { if (e.target === lbOverlay) lbOverlay.classList.remove('active'); });
+document.addEventListener('keydown', e => {
+  if (!lbOverlay.classList.contains('active')) return;
+  if (e.key === 'Escape') lbOverlay.classList.remove('active');
+  if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+  if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+});
+
+// Zone card modal
+const zcOverlay = document.getElementById('zcOverlay');
+const zcClose   = document.getElementById('zcClose');
+document.getElementById('hotspot-retail').addEventListener('click', () => zcOverlay.classList.add('active'));
+zcClose.addEventListener('click', () => zcOverlay.classList.remove('active'));
+zcOverlay.addEventListener('click', e => { if (e.target === zcOverlay) zcOverlay.classList.remove('active'); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') zcOverlay.classList.remove('active');
+});
+</script>
+</body>
+</html>

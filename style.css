@@ -765,6 +765,106 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .nav-settings-btn:hover { background: rgba(0,0,0,0.05); color: var(--text); }
 
 /* ═══════════════════════════════════════
+   MEGA MENU
+═══════════════════════════════════════ */
+.mega-scrim {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 997;
+}
+.mega-scrim.show { opacity: 1; pointer-events: auto; }
+
+.mega-panel {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  z-index: 999;
+  background: rgba(252,252,252,.97);
+  backdrop-filter: saturate(180%) blur(28px);
+  -webkit-backdrop-filter: saturate(180%) blur(28px);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 8px 36px rgba(0,0,0,.08);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .22s ease, transform .22s ease;
+}
+.mega-panel.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.mega-content { display: none; padding: 28px 0 32px }
+.mega-content.active { display: block }
+.mega-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px }
+
+.mega-section-label {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #c0c0c0; margin-bottom: 16px;
+}
+.mega-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px }
+.mega-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 9px; cursor: pointer;
+  opacity: 0; transition: background .15s;
+}
+.mega-content.active .mega-item {
+  animation: megaIn .3s cubic-bezier(.25,.46,.45,.94) forwards;
+  animation-delay: calc(var(--i) * 35ms);
+}
+.mega-item:hover { background: rgba(0,0,0,.055) }
+.mega-icon {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 9px;
+  background: rgba(0,0,0,.05);
+  display: flex; align-items: center; justify-content: center;
+  color: #555; transition: background .18s, color .18s;
+}
+.mega-item:hover .mega-icon { background: #0a0a0a; color: #fff }
+.mega-label { font-size: 13px; font-weight: 500; color: #111; letter-spacing: -.015em; line-height: 1.3 }
+.mega-desc { font-size: 11px; color: #b5b5b5; letter-spacing: -.005em; margin-top: 1px; line-height: 1.35 }
+
+.mega-cascade-header {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: #c0c0c0; margin-bottom: 16px;
+}
+.mega-cascade { display: flex; gap: 0 }
+.mega-l2-list {
+  width: 160px; flex-shrink: 0;
+  padding: 0 28px 0 0; display: flex; flex-direction: column; gap: 4px;
+  border-right: 1px solid rgba(0,0,0,.07);
+}
+.mega-l2-item { display: block; padding: 8px 0; cursor: pointer }
+.mega-l2-label { font-size: 20px; font-weight: 600; color: #bbb; letter-spacing: -.02em; transition: color .12s; display: block; line-height: 1.3 }
+.mega-l2-item:hover .mega-l2-label { color: #0a0a0a }
+.mega-l2-item.active .mega-l2-label { color: #004724 }
+.mega-l3-panel { flex: 1; padding: 0 0 0 32px }
+.mega-l3-content { display: none }
+.mega-l3-content.active { display: block }
+.mega-l3-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px }
+.mega-l3-item {
+  display: block; padding: 7px 10px; border-radius: 7px; cursor: pointer;
+  opacity: 0; transition: background .12s;
+}
+.mega-l3-content.active .mega-l3-item {
+  animation: megaIn .22s cubic-bezier(.25,.46,.45,.94) forwards;
+  animation-delay: calc(var(--i) * 22ms);
+}
+.mega-l3-item:hover { background: rgba(0,0,0,.04) }
+.mega-l3-label { font-size: 13.5px; font-weight: 300; color: #111; letter-spacing: -.01em; transition: color .12s }
+.mega-l3-item:hover .mega-l3-label { color: #004724 }
+
+@keyframes megaIn {
+  from { opacity: 0; transform: translateY(6px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+/* ═══════════════════════════════════════
    HOME HERO
 ═══════════════════════════════════════ */
 .home-hero {
