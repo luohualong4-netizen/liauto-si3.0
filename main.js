@@ -16,7 +16,12 @@
 
   function switchSection(id) {
     navItems.forEach(b => b.classList.remove('active'));
-    const btn = document.querySelector(`.nav-item[data-section="${id}"]`);
+
+    // facade/interior are sub-sections under 综合中心标准
+    let navKey = id;
+    if (id === 'facade' || id === 'interior') navKey = 'integrated';
+
+    const btn = document.querySelector(`.nav-item[data-section="${navKey}"]`);
     if (btn) btn.classList.add('active');
 
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -24,7 +29,15 @@
     if (target) target.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
 
-    nav.classList.toggle('nav-dark', id === 'home');
+    nav.classList.toggle('nav-dark', id === 'home' || id === 'agent');
+
+    if (id === 'home') {
+      // Restart landing page animations on re-entry
+      const resetEls = document.querySelectorAll(
+        '.home-lp-bg, .home-lp-title, .home-lp-subtitle, .home-lp-btns'
+      );
+      resetEls.forEach(el => { el.style.animation = 'none'; void el.offsetHeight; el.style.animation = ''; });
+    }
 
     if (id === 'interior') {
       initInteriorTour();
@@ -34,103 +47,34 @@
 
   navItems.forEach(btn => {
     btn.addEventListener('click', () => {
-      closeMega();
       switchSection(btn.dataset.section);
     });
   });
 
-  // ─── Mega Menu ───────────────────────────────────────────
-  const megaPanel = document.getElementById('megaPanel');
-  const megaScrim = document.getElementById('megaScrim');
-  let megaCloseTimer = null;
+  // Landing page buttons
+  const lpBtnAgent = document.getElementById('lpBtnAgent');
+  const lpBtnIntegrated = document.getElementById('lpBtnIntegrated');
+  const lpBtnRetail = document.getElementById('lpBtnRetail');
+  if (lpBtnAgent) lpBtnAgent.addEventListener('click', () => switchSection('agent'));
+  if (lpBtnIntegrated) lpBtnIntegrated.addEventListener('click', () => switchSection('integrated'));
+  if (lpBtnRetail) lpBtnRetail.addEventListener('click', () => switchSection('retail'));
 
-  function resetL3Anim(content) {
-    content.querySelectorAll('.mega-l3-item').forEach(el => {
-      el.style.animation = 'none';
-      void el.offsetHeight;
-      el.style.animation = '';
-    });
+  // ─── Split panel clicks ───────────────────────────────────
+  function showToast(msg) {
+    const toast = document.getElementById('globalToast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('active');
+    setTimeout(() => toast.classList.remove('active'), 2500);
   }
 
-  function initCascade(content) {
-    const first = content.querySelector('.mega-l2-item');
-    if (!first) return;
-    content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
-    first.classList.add('active');
-    const key = first.dataset.l3;
-    content.querySelectorAll('.mega-l3-content').forEach(c => c.classList.remove('active'));
-    const l3 = content.querySelector(`.mega-l3-content[data-l3="${key}"]`);
-    if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
-  }
+  const splitIntFacade = document.getElementById('splitIntFacade');
+  const splitIntInterior = document.getElementById('splitIntInterior');
+  if (splitIntFacade) splitIntFacade.addEventListener('click', () => switchSection('facade'));
+  if (splitIntInterior) splitIntInterior.addEventListener('click', () => switchSection('interior'));
 
-  function openMega(menuKey) {
-    clearTimeout(megaCloseTimer);
-    megaPanel.style.display = 'block';
-    const allContents = megaPanel.querySelectorAll('.mega-content');
-    const target = megaPanel.querySelector(`.mega-content[data-for="${menuKey}"]`);
-    if (!target) return;
-    allContents.forEach(c => { c.classList.remove('active'); c.style.display = 'none'; });
-    requestAnimationFrame(() => {
-      target.classList.add('active');
-      target.style.display = 'block';
-      megaPanel.classList.add('open');
-      megaScrim.classList.add('show');
-      if (menuKey === 'interior') initCascade(target);
-    });
-  }
-
-  function closeMega() {
-    megaCloseTimer = setTimeout(() => {
-      megaPanel.classList.remove('open');
-      megaScrim.classList.remove('show');
-      megaPanel.querySelectorAll('.mega-content').forEach(c => {
-        c.classList.remove('active');
-        c.style.display = 'none';
-      });
-      megaPanel.style.display = 'none';
-    }, 180);
-  }
-
-  navItems.forEach(btn => {
-    const key = btn.dataset.section;
-    if (key === 'facade' || key === 'interior') {
-      btn.addEventListener('mouseenter', () => openMega(key));
-      btn.addEventListener('mouseleave', closeMega);
-    }
-  });
-  megaPanel.addEventListener('mouseenter', () => clearTimeout(megaCloseTimer));
-  megaPanel.addEventListener('mouseleave', closeMega);
-  megaScrim.addEventListener('click', closeMega);
-
-  // L2 hover → switch L3
-  megaPanel.addEventListener('mouseover', e => {
-    const l2 = e.target.closest('.mega-l2-item');
-    if (!l2) return;
-    const content = l2.closest('.mega-content');
-    if (!content || l2.classList.contains('active')) return;
-    content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
-    l2.classList.add('active');
-    const oldL3 = content.querySelector('.mega-l3-content.active');
-    if (oldL3) oldL3.classList.remove('active');
-    const l3 = content.querySelector(`.mega-l3-content[data-l3="${l2.dataset.l3}"]`);
-    if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
-  });
-
-  // Facade mega items → switch section + open modal
-  megaPanel.querySelectorAll('.mega-item[data-modal]').forEach(item => {
-    item.addEventListener('click', () => {
-      closeMega();
-      switchSection('facade');
-      setTimeout(() => openModal(item.dataset.modal), 80);
-    });
-  });
-
-  // Interior L3 items → navigate to overview page
-  megaPanel.querySelectorAll('.mega-l3-item[data-href]').forEach(item => {
-    item.addEventListener('click', () => {
-      closeMega();
-      window.location.href = item.dataset.href;
-    });
+  document.querySelectorAll('#section-retail .split-panel--disabled').forEach(panel => {
+    panel.addEventListener('click', () => showToast('零售中心标准建设中，敬请期待'));
   });
 
   // ─── Modal ───────────────────────────────────────────────
@@ -307,7 +251,7 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // ─── Nav dark: apply on load if starting at home ─────────
+  // ─── Nav dark: apply on load (starts at home = dark) ────────
   nav.classList.add('nav-dark');
 
   // ─── SI Agent ─────────────────────────────────────────────
