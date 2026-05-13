@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <title>理想汽车 SI3.0 空间标准</title>
-  <link rel="stylesheet" href="style.css?v=4">
-  <link rel="stylesheet" href="interior.css?v=4">
+  <title>理想汽车 SI3.0 空间标准可视化平台</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="interior.css?v=8">
 </head>
 <body>
 
@@ -17,12 +18,12 @@
         <svg width="54" height="22" viewBox="0 0 49 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" fill="#111110" d="M38.3666 0.736389L43.2286 9.57411H28.2074L23.3684 0.736389H38.3666ZM24.1257 11.0241C22.4057 11.0241 20.617 10.8629 19.5162 9.91939C18.5987 9.20598 18.0941 8.37744 17.5667 7.43397C17.452 7.24681 16.1277 4.82963 15.106 2.96474L15.1055 2.96381C14.4929 1.84564 13.9891 0.926227 13.9204 0.80549H0C0.500179 1.7225 1.00036 2.64336 1.5011 3.56527L1.50114 3.56535L1.50117 3.56539C2.72228 5.81354 3.94676 8.06789 5.1828 10.2876C6.69629 13.0494 8.14103 15.6273 10.7783 17.5144C12.0399 18.4577 13.3698 19.0794 14.9294 19.4707C16.4659 19.839 18.0254 19.8849 19.6076 19.8849H31.9917L27.1299 11.0241H24.1257ZM29.0105 11.0011L33.8725 19.8849H48.8707L43.9857 11.0011H29.0105Z"/>
         </svg>
-        <span class="nav-brand">SI 3.0</span>
       </div>
       <div class="nav-links">
         <button class="nav-item active" data-section="home">首页</button>
-        <button class="nav-item" data-section="facade">外立面标准</button>
-        <button class="nav-item" data-section="interior">室内标准</button>
+        <button class="nav-item" data-section="agent">SI 3.0 Agent</button>
+        <button class="nav-item" data-section="integrated">综合中心标准</button>
+        <button class="nav-item" data-section="retail">零售中心标准</button>
       </div>
       <div class="nav-actions">
         <div class="nav-avatar" title="用户">
@@ -45,87 +46,55 @@
   <div class="mega-scrim" id="megaScrim"></div>
   <div class="mega-panel" id="megaPanel" style="display:none">
 
-    <!-- 外立面标准 -->
-    <div class="mega-content" data-for="facade">
-      <div class="mega-inner">
-        <div class="mega-section-label">外立面标准</div>
-        <div class="mega-grid">
-          <div class="mega-item" data-modal="biaoshi" style="--i:0">
-            <div><div class="mega-label">标识定位原则</div><div class="mega-desc">品牌标识尺寸与定位规范</div></div>
-          </div>
-          <div class="mega-item" data-modal="dengguang" style="--i:1">
-            <div><div class="mega-label">灯光设计标准</div><div class="mega-desc">夜间光环境与 LED 规范</div></div>
-          </div>
-          <div class="mega-item" data-modal="hengmei" style="--i:2">
-            <div><div class="mega-label">横楣设计规范</div><div class="mega-desc">波浪板材料与安装标准</div></div>
-          </div>
-          <div class="mega-item" data-modal="muqiang" style="--i:3">
-            <div><div class="mega-label">幕墙饰面标准</div><div class="mega-desc">玻璃幕墙与铝板规格</div></div>
-          </div>
-          <div class="mega-item" data-modal="mendou" style="--i:4">
-            <div><div class="mega-label">门斗构造细则</div><div class="mega-desc">入口门斗尺寸与构造</div></div>
-          </div>
+    <!-- 综合中心标准 -->
+    <div class="mega-content" data-for="integrated">
+      <div class="mega-two-col">
+        <div class="mega-col-card" id="megaGoFacade">
+          <div class="mega-col-label">外立面标准</div>
+          <div class="mega-col-desc">交互式外立面标准 · 标识 / 灯光 / 横楣 / 幕墙 / 门斗</div>
+        </div>
+        <div class="mega-col-card" id="megaGoInterior">
+          <div class="mega-col-label">室内标准</div>
+          <div class="mega-col-desc">交互式室内标准 · 空间 / 材料 / 设计</div>
         </div>
       </div>
     </div>
 
-    <!-- 室内标准 -->
-    <div class="mega-content" data-for="interior">
-      <div class="mega-inner">
-        <div class="mega-cascade-header">室内标准</div>
-        <div class="mega-cascade">
-          <div class="mega-l2-list">
-            <div class="mega-l2-item active" data-l3="design" style="--i:0"><span class="mega-l2-label">室内设计原则</span></div>
-            <div class="mega-l2-item" data-l3="space" style="--i:1"><span class="mega-l2-label">空间系统原则</span></div>
-            <div class="mega-l2-item" data-l3="material" style="--i:2"><span class="mega-l2-label">材料与节点</span></div>
-          </div>
-          <div class="mega-l3-panel">
-            <div class="mega-l3-content active" data-l3="design">
-              <div class="mega-l3-grid">
-                <div class="mega-l3-item" data-href="interior-overview.html#floor-plan" style="--i:0"><span class="mega-l3-label">设计总览</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html#s-2" style="--i:1"><span class="mega-l3-label">零售中心</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html#s-12" style="--i:2"><span class="mega-l3-label">交付中心</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html#s-8" style="--i:3"><span class="mega-l3-label">服务中心</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:4"><span class="mega-l3-label">公用部分</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:5"><span class="mega-l3-label">辅助系统设备</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:6"><span class="mega-l3-label">模块原则</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:7"><span class="mega-l3-label">家具原则</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:8"><span class="mega-l3-label">软装饰品</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:9"><span class="mega-l3-label">软装绿植</span></div>
-              </div>
-            </div>
-            <div class="mega-l3-content" data-l3="space">
-              <div class="mega-l3-grid">
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:0"><span class="mega-l3-label">外立面照明</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:1"><span class="mega-l3-label">停车区照明</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:2"><span class="mega-l3-label">室内照明</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:3"><span class="mega-l3-label">标识总览</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:4"><span class="mega-l3-label">标识细则</span></div>
-              </div>
-            </div>
-            <div class="mega-l3-content" data-l3="material">
-              <div class="mega-l3-grid">
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:0"><span class="mega-l3-label">主材清单</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:1"><span class="mega-l3-label">五金清单</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:2"><span class="mega-l3-label">清单目录</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:3"><span class="mega-l3-label">天花节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:4"><span class="mega-l3-label">墙面节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:5"><span class="mega-l3-label">地面节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:6"><span class="mega-l3-label">外观节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:7"><span class="mega-l3-label">儿童区节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:8"><span class="mega-l3-label">楼梯节点</span></div>
-                <div class="mega-l3-item" data-href="interior-overview.html" style="--i:9"><span class="mega-l3-label">门节点</span></div>
-              </div>
-            </div>
-          </div>
+    <!-- 零售中心标准 -->
+    <div class="mega-content" data-for="retail">
+      <div class="mega-two-col">
+        <div class="mega-col-card disabled">
+          <div class="mega-col-label">外立面标准</div>
+          <div class="mega-col-desc">即将推出</div>
+        </div>
+        <div class="mega-col-card disabled">
+          <div class="mega-col-label">室内标准</div>
+          <div class="mega-col-desc">即将推出</div>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- ═══ SECTION 0: 首页 ═══ -->
+  <!-- ═══ SECTION 0: 首页 Landing Page ═══ -->
   <section class="section active" id="section-home">
+    <div class="home-lp-hero">
+      <img src="assets/home/cover.jpg" class="home-lp-bg" alt="理想汽车综合中心">
+      <div class="home-lp-overlay"></div>
+      <div class="home-lp-body">
+        <h1 class="home-lp-title">理想汽车<br>空间标准可视化平台</h1>
+        <p class="home-lp-subtitle">覆盖综合中心与零售中心 · 外立面及室内空间设计标准一站可查</p>
+        <div class="home-lp-btns">
+          <button id="lpBtnAgent" class="home-lp-btn home-lp-btn-white">与 SI 3.0 Agent 对话</button>
+          <button id="lpBtnIntegrated" class="home-lp-btn home-lp-btn-outline">探索综合中心标准</button>
+          <button id="lpBtnRetail" class="home-lp-btn home-lp-btn-outline">探索零售中心标准</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 1: SI 3.0 Agent（原首页）═══ -->
+  <section class="section" id="section-agent">
     <div class="home-hero">
       <div class="home-hero-grid"></div>
       <div class="home-hero-radial"></div>
@@ -136,9 +105,8 @@
             <span class="word-reveal" style="--d:1">空间产品</span>
           </span>
           <span class="title-line">
-            <span class="word-reveal accent-mint" style="--d:2" translate="no">SI</span>
-            <span class="word-reveal accent-mint" style="--d:3">3.0</span>
-            <span class="word-reveal accent-mint" style="--d:4" translate="no">Agent</span>
+            <span class="word-reveal accent-mint" style="--d:2" translate="no">SI 3.0</span>
+            <span class="word-reveal accent-mint" style="--d:3" translate="no">Agent</span>
           </span>
         </h1>
         <div class="agent-card">
@@ -193,7 +161,31 @@
     <footer class="home-footer">© 2026 理想汽车 · 空间设计标准 SI 3.0</footer>
   </section>
 
-  <!-- ═══ SECTION 1: 外立面标准 ═══ -->
+  <!-- ═══ SECTION: 综合中心标准 落地页 ═══ -->
+  <section class="section" id="section-integrated">
+    <div class="split-hero">
+      <div class="split-panel" id="splitIntFacade">
+        <img class="split-panel-bg" src="assets/标准封面图/综合中心外立面.jpg" alt="综合中心外立面">
+        <div class="split-panel-overlay"></div>
+        <div class="split-panel-content">
+          <div class="split-panel-title">外立面标准</div>
+          <div class="split-panel-desc">交互式建筑立面 · 标识 / 灯光 / 横楣 / 幕墙 / 门斗</div>
+          <div class="split-panel-cta">进入 →</div>
+        </div>
+      </div>
+      <div class="split-panel" id="splitIntInterior">
+        <img class="split-panel-bg" src="assets/标准封面图/综合中心室内.jpg" alt="综合中心室内">
+        <div class="split-panel-overlay"></div>
+        <div class="split-panel-content">
+          <div class="split-panel-title">室内标准</div>
+          <div class="split-panel-desc">交互式室内标准 · 空间 / 材料 / 设计</div>
+          <div class="split-panel-cta">进入 →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION 2: 外立面标准 ═══ -->
   <section class="section" id="section-facade">
 
     <!-- Hero -->
@@ -390,7 +382,7 @@
     </div>
   </section>
 
-  <!-- ═══ SECTION 2: 室内标准 ═══ -->
+  <!-- ═══ SECTION 3: 室内标准 ═══ -->
   <section class="section" id="section-interior">
 
     <!-- ① 虚拟漫游 Hero -->
@@ -449,6 +441,15 @@
 
     <!-- detail content lives in interior-overview.html -->
 
+  </section>
+
+  <!-- ═══ SECTION 4: 零售中心标准（占位）═══ -->
+  <section class="section" id="section-retail">
+    <div class="retail-placeholder">
+      <p class="retail-ph-eyebrow">RETAIL CENTER</p>
+      <h2 class="retail-ph-title">零售中心标准</h2>
+      <p class="retail-ph-sub">内容建设中，敬请期待</p>
+    </div>
   </section>
 
   <!-- ═══ MODAL ═══ -->
