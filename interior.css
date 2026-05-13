@@ -46,12 +46,8 @@
 }
 .int-hero-overlay { display: none }
 .int-hero-bottom {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
   text-align: center;
-  z-index: 2;
+  padding: 32px 40px 14px;
 }
 /* ── HOTSPOTS ── */
 .int-hero-hotspot {

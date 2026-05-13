@@ -1191,29 +1191,34 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   flex: 1;
   overflow: hidden;
   cursor: pointer;
-  transition: flex 0.6s var(--ease);
+  transition: flex 0.9s var(--ease) 0.07s;
 }
 
 .split-panel-bg {
   position: absolute;
   inset: 0;
   object-fit: cover;
-  transition: transform 0.6s var(--ease);
+}
+
+@keyframes splitBgZoom {
+  from { transform: scale(1.0); }
+  to   { transform: scale(1.1); }
 }
 
 .split-panel:hover .split-panel-bg {
-  transform: scale(1.03);
+  animation: splitBgZoom 12s cubic-bezier(.25,.46,.45,.94) forwards;
 }
 
 .split-panel-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
+  background: linear-gradient(to bottom,
     rgba(0,0,0,0.05) 0%,
-    rgba(0,0,0,0.25) 50%,
-    rgba(0,0,0,0.6) 100%
-  );
+    rgba(0,0,0,0.65) 55%,
+    rgba(0,0,0,0.92) 100%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  z-index: 1;
 }
 
 .split-panel-content {
@@ -1222,8 +1227,8 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px;
+  justify-content: flex-end;
+  padding: 0 40px 180px;
   color: #fff;
   z-index: 2;
   text-align: center;
@@ -1236,19 +1241,25 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   font-weight: 600;
   letter-spacing: -0.02em;
   white-space: nowrap;
-  transition: font-size 0.5s var(--ease);
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(4px);
+  transition: opacity 0.5s var(--ease-o) 0.05s, transform 0.5s var(--ease-o) 0.05s,
+              filter 0.5s var(--ease-o) 0.05s, font-size 0.5s var(--ease);
 }
 
 .split-panel-desc {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  color: rgba(255,255,255,0.8);
-  margin-top: 10px;
-  max-width: 320px;
+  color: rgba(255,255,255,0.85);
+  margin-top: 12px;
+  max-width: 340px;
   line-height: 1.6;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.35s ease 0.08s, transform 0.35s ease 0.08s;
+  transform: translateY(24px);
+  filter: blur(4px);
+  transition: opacity 0.5s var(--ease-o) 0.12s, transform 0.5s var(--ease-o) 0.12s,
+              filter 0.5s var(--ease-o) 0.12s;
 }
 
 .split-panel-cta {
@@ -1263,9 +1274,10 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
   font-weight: 500;
   color: #fff;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.35s ease 0.14s, transform 0.35s ease 0.14s,
-              background 0.2s ease, border-color 0.2s ease;
+  transform: translateY(24px);
+  filter: blur(4px);
+  transition: opacity 0.5s var(--ease-o) 0.19s, transform 0.5s var(--ease-o) 0.19s,
+              filter 0.5s var(--ease-o) 0.19s, background 0.2s ease, border-color 0.2s ease;
 }
 
 .split-panel-cta:hover {
@@ -1274,19 +1286,25 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 }
 
 /* ── :has() hover expansion ── */
+.split-hero:has(.split-panel:hover) .split-panel:hover .split-panel-overlay { opacity: 1; }
+
 .split-hero:has(.split-panel:first-child:hover) .split-panel:first-child { flex: 9; }
 .split-hero:has(.split-panel:first-child:hover) .split-panel:last-child  { flex: 1; }
 .split-hero:has(.split-panel:last-child:hover)  .split-panel:first-child { flex: 1; }
 .split-hero:has(.split-panel:last-child:hover)  .split-panel:last-child  { flex: 9; }
 
-/* expanded panel: reveal desc + cta, enlarge title */
+/* expanded panel: reveal title + desc + cta, enlarge title */
 .split-hero:has(.split-panel:hover) .split-panel:hover .split-panel-title {
-  font-size: clamp(28px, 3vw, 44px);
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  font-size: clamp(48px, 5.5vw, 76px);
 }
 .split-hero:has(.split-panel:hover) .split-panel:hover .split-panel-desc,
 .split-hero:has(.split-panel:hover) .split-panel:hover .split-panel-cta {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
 /* shrunk sibling: fade content */
@@ -1294,6 +1312,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .split-hero:has(.split-panel:last-child:hover)  .split-panel:first-child .split-panel-content {
   opacity: 0.35;
 }
+
 
 /* disabled panels (retail) */
 .split-panel--disabled {
