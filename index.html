@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css?v=8">
   <link rel="stylesheet" href="interior.css?v=9">
+  <link rel="preload" as="image" href="assets/home/cover.jpg" fetchpriority="high">
 </head>
 <body>
 
@@ -31,11 +32,11 @@
   <!-- ═══ SECTION 0: 首页 Landing Page ═══ -->
   <section class="section active" id="section-home">
     <div class="home-lp-hero">
-      <img src="assets/home/cover.jpg" class="home-lp-bg" alt="理想汽车综合中心">
+      <img src="assets/home/cover.jpg" class="home-lp-bg" alt="理想汽车综合中心" fetchpriority="high">
       <div class="home-lp-overlay"></div>
       <div class="home-lp-body">
         <h1 class="home-lp-title">理想汽车<br>空间标准可视化平台</h1>
-        <p class="home-lp-subtitle">覆盖综合中心与零售中心 · 外立面及室内空间设计标准一站可查</p>
+        <p class="home-lp-subtitle">覆盖综合中心与零售中心 · SI 3.0 设计标准一站可查</p>
         <div class="home-lp-btns">
           <button id="lpBtnAgent" class="home-lp-btn home-lp-btn-outline">与 SI 3.0 Agent 对话</button>
           <button id="lpBtnIntegrated" class="home-lp-btn home-lp-btn-outline">探索综合中心标准</button>
@@ -117,19 +118,19 @@
   <section class="section" id="section-integrated">
     <div class="split-hero">
       <div class="split-panel" id="splitIntFacade">
-        <img class="split-panel-bg" src="assets/标准封面图/综合中心外立面.jpg" alt="理想汽车综合中心外立面标准封面">
+        <img class="split-panel-bg" src="assets/标准封面图/综合中心外立面.jpg" alt="理想汽车综合中心外立面标准封面" loading="lazy">
         <div class="split-panel-overlay"></div>
         <div class="split-panel-content">
-          <div class="split-panel-title">外立面标准</div>
+          <div class="split-panel-title">综合中心外立面标准</div>
           <div class="split-panel-desc">交互式建筑立面 · 标识 / 灯光 / 横楣 / 幕墙 / 门斗</div>
           <div class="split-panel-cta">进入 →</div>
         </div>
       </div>
       <div class="split-panel" id="splitIntInterior">
-        <img class="split-panel-bg" src="assets/标准封面图/综合中心室内.jpg" alt="理想汽车综合中心室内标准封面">
+        <img class="split-panel-bg" src="assets/标准封面图/综合中心室内.jpg" alt="理想汽车综合中心室内标准封面" loading="lazy">
         <div class="split-panel-overlay"></div>
         <div class="split-panel-content">
-          <div class="split-panel-title">室内标准</div>
+          <div class="split-panel-title">综合中心室内标准</div>
           <div class="split-panel-desc">交互式室内标准 · 空间 / 材料 / 设计</div>
           <div class="split-panel-cta">进入 →</div>
         </div>
@@ -143,7 +144,7 @@
     <!-- Hero -->
     <div class="hero-wrap">
       <div class="hero-container">
-        <img src="assets/facade.jpg" alt="理想汽车综合中心外立面" class="facade-img" draggable="false">
+        <img src="assets/facade.jpg" alt="理想汽车综合中心外立面" class="facade-img" draggable="false" loading="lazy">
 
         <!-- Click zones — recalibrated v3 from facade.jpg pixel analysis (4000×2000, building starts y=40%) -->
         <div class="hotspot-zones">
@@ -248,9 +249,9 @@
         </div>
         <div class="overview-right">
           <div class="photo-grid">
-            <div class="photo-cell"><img src="assets/overview/photo1.jpg" alt="横楣波浪板立面"></div>
-            <div class="photo-cell"><img src="assets/overview/photo2.jpg" alt="幕墙通透立面"></div>
-            <div class="photo-cell"><img src="assets/overview/photo3.jpg" alt="铝板幕墙立面"></div>
+            <div class="photo-cell"><img src="assets/overview/photo1.jpg" alt="横楣波浪板立面" loading="lazy"></div>
+            <div class="photo-cell"><img src="assets/overview/photo2.jpg" alt="幕墙通透立面" loading="lazy"></div>
+            <div class="photo-cell"><img src="assets/overview/photo3.jpg" alt="铝板幕墙立面" loading="lazy"></div>
           </div>
         </div>
       </div>
@@ -271,17 +272,17 @@
             <div class="material-col">
               <div class="mcol-head">标识</div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-1.jpg" alt="一级标识"></div>
+                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-1.jpg" alt="一级标识" loading="lazy"></div>
                 <div class="mname">一级标识</div>
                 <div class="mspec">颜色：LED灯（正发光）<br>材料：5mm 乳白色亚克力<br>色温：6500K</div>
               </div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-2.jpg" alt="二级标识"></div>
+                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-2.jpg" alt="二级标识" loading="lazy"></div>
                 <div class="mname">二级标识</div>
                 <div class="mspec">颜色：LED灯（正发光）<br>材料：5mm 乳白色亚克力<br>色温：6500K</div>
               </div>
               <div class="mcard optional">
-                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-3.jpg" alt="三级标识"></div>
+                <div class="mswatch"><img src="assets/overview/biaoshi-swatch-3.jpg" alt="三级标识" loading="lazy"></div>
                 <div class="mname">三级标识</div>
                 <div class="mspec">颜色：LED灯（正发光）<br>材料：5mm 乳白色亚克力<br>色温：6500K</div>
               </div>
@@ -291,17 +292,17 @@
             <div class="material-col">
               <div class="mcol-head">门楣</div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/hengmei-swatch-1.jpg" alt="波浪板"></div>
+                <div class="mswatch"><img src="assets/overview/hengmei-swatch-1.jpg" alt="波浪板" loading="lazy"></div>
                 <div class="mname">波浪板</div>
                 <div class="mspec">规格：直径70mm<br>颜色：鼠灰-JX816<br>吉祥铝塑板色卡</div>
               </div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/hengmei-swatch-2.jpg" alt="铝塑板/铝单板"></div>
+                <div class="mswatch"><img src="assets/overview/hengmei-swatch-2.jpg" alt="铝塑板/铝单板" loading="lazy"></div>
                 <div class="mname">铝塑板 / 铝单板</div>
                 <div class="mspec">颜色：珠珠灰-JX815<br>（吉祥铝塑板色卡）</div>
               </div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/hengmei-swatch-3.jpg" alt="洗墙灯"></div>
+                <div class="mswatch"><img src="assets/overview/hengmei-swatch-3.jpg" alt="洗墙灯" loading="lazy"></div>
                 <div class="mname">洗墙灯</div>
                 <div class="mspec">材料：LED 线条灯（待定）<br>色温：5500K</div>
               </div>
@@ -311,12 +312,12 @@
             <div class="material-col">
               <div class="mcol-head">幕墙</div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/muqiang-swatch-1.jpg" alt="铝塑板/铝单板"></div>
+                <div class="mswatch"><img src="assets/overview/muqiang-swatch-1.jpg" alt="铝塑板/铝单板" loading="lazy"></div>
                 <div class="mname">铝塑板 / 铝单板</div>
                 <div class="mspec">颜色：珠珠灰-JX815<br>（吉祥铝塑板色卡）</div>
               </div>
               <div class="mcard required">
-                <div class="mswatch"><img src="assets/overview/muqiang-swatch-2.jpg" alt="透明玻璃"></div>
+                <div class="mswatch"><img src="assets/overview/muqiang-swatch-2.jpg" alt="透明玻璃" loading="lazy"></div>
                 <div class="mname">透明玻璃</div>
                 <div class="mspec">材料：双层钢化玻璃（夹胶或中空）<br>颜色：超白 / 普白<br>透光率75%以上</div>
               </div>
@@ -337,21 +338,27 @@
   <!-- ═══ SECTION 3: 室内标准 ═══ -->
   <section class="section" id="section-interior">
 
-    <!-- ① 虚拟漫游 Hero -->
+    <!-- ① 360° 虚拟漫游 Hero -->
     <div class="int-hero" id="int-heroSection">
-      <div class="int-hero-pan-wrap" id="int-heroPanWrap">
-        <img class="int-hero-img" id="int-heroImg" src="assets/interior/展厅全景图.webp" alt="理想汽车门店全景效果图">
-        <!-- hotspots injected by JS -->
-      </div>
       <div class="int-hero-scene-overlay" id="int-heroSceneOverlay"></div>
       <div class="int-hero-pan-hint" id="int-heroPanHint">
-        <span class="int-hero-pan-text">移动探索空间</span>
-        <div class="int-hero-pan-arrows">&#8592;&nbsp;&nbsp;&nbsp;&#8594;</div>
+        <span class="int-hero-pan-text">拖拽探索 360° 空间</span>
+        <div class="int-hero-pan-arrows">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 4 L18 8M18 28 L18 32M4 18 L8 18M28 18 L32 18"/>
+            <path d="M18 4 L15 7M18 4 L21 7M18 32 L15 29M18 32 L21 29M4 18 L7 15M4 18 L7 21M32 18 L29 15M32 18 L29 21"/>
+            <circle cx="18" cy="18" r="6" stroke-dasharray="3 2"/>
+          </svg>
+        </div>
       </div>
     </div>
-    <div class="int-hero-bottom">
-      <h2 class="int-hero-bottom-title">交互式室内标准</h2>
-      <p class="int-hero-bottom-sub">向下滑动查看设计总览</p>
+    <div class="hero-text">
+      <h1 class="hero-title">交互式室内标准</h1>
+      <p class="hero-sub">点击热点查看室内设计标准细节</p>
+      <div class="scroll-hint">
+        <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><rect x="5.5" y="0.5" width="5" height="9" rx="2.5" stroke="#999" stroke-width="1"/><circle cx="8" cy="4" r="1.5" fill="#999"/><path d="M4 13l4 4 4-4" stroke="#999" stroke-width="1.2"/></svg>
+        向下滑动查看设计总览
+      </div>
     </div>
 
     <!-- ② 设计原则介绍 -->
@@ -399,18 +406,18 @@
   <section class="section" id="section-retail">
     <div class="split-hero">
       <div class="split-panel split-panel--disabled">
-        <img src="assets/标准封面图/零售中心外立面..jpg" class="split-panel-bg" alt="理想汽车零售中心外立面标准封面">
+        <img src="assets/标准封面图/零售中心外立面..jpg" class="split-panel-bg" alt="理想汽车零售中心外立面标准封面" loading="lazy">
         <div class="split-panel-overlay"></div>
         <div class="split-panel-content">
-          <div class="split-panel-title">外立面标准</div>
+          <div class="split-panel-title">零售中心外立面标准</div>
           <div class="split-panel-desc">零售中心外立面设计规范</div>
         </div>
       </div>
       <div class="split-panel split-panel--disabled">
-        <img src="assets/标准封面图/零售中心室内.jpg" class="split-panel-bg" alt="理想汽车零售中心室内标准封面">
+        <img src="assets/标准封面图/零售中心室内.jpg" class="split-panel-bg" alt="理想汽车零售中心室内标准封面" loading="lazy">
         <div class="split-panel-overlay"></div>
         <div class="split-panel-content">
-          <div class="split-panel-title">室内标准</div>
+          <div class="split-panel-title">零售中心室内标准</div>
           <div class="split-panel-desc">零售中心室内设计规范</div>
         </div>
       </div>
@@ -430,7 +437,8 @@
 
   <div id="globalToast" class="global-toast"></div>
 
-  <script src="data.js"></script>
-  <script src="main.js"></script>
+  <script src="three.min.js" defer></script>
+  <script src="data.js" defer></script>
+  <script src="main.js" defer></script>
 </body>
 </html>

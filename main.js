@@ -374,141 +374,243 @@
     card.addEventListener('click', () => switchSection(card.dataset.section));
   });
 
-})();
+  // Deep-link from sub-pages (e.g. interior-overview → section-interior)
+  const gotoSection = sessionStorage.getItem('gotoSection');
+  if (gotoSection) {
+    sessionStorage.removeItem('gotoSection');
+    switchSection(gotoSection);
+  }
 
-// ═══════════════════════════════════════
-// 室内标准 — Interior Section Logic
-// ═══════════════════════════════════════
-(function () {
-  'use strict';
+// ─── Interior Section Logic ──────────────────────────────
 
   let tourInited = false;
   let observerInited = false;
 
-  // ─── Virtual Tour ──────────────────────────────────────────
+  // ─── 360° Virtual Tour ───────────────────────────────────
   function initInteriorTour() {
     if (tourInited) return;
     tourInited = true;
 
     const hero    = document.getElementById('int-heroSection');
-    const wrap    = document.getElementById('int-heroPanWrap');
-    const img     = document.getElementById('int-heroImg');
     const hint    = document.getElementById('int-heroPanHint');
     const overlay = document.getElementById('int-heroSceneOverlay');
-    if (!hero || !wrap || !img) return;
+    if (!hero || typeof THREE === 'undefined') {
+      if (hero) hero.style.cssText += 'display:flex;align-items:center;justify-content:center;background:#111;';
+      if (hero) hero.innerHTML = '<p style="color:#fff;font-size:14px">3D 引擎加载失败，请刷新重试</p>';
+      return;
+    }
 
     const SCENES = [
       {
-        src: 'assets/interior/展厅全景图.webp',
+        src: 'assets/interior/全景图.jpeg',
         name: '展厅总览',
-        hotspots: [{ x: 63, y: 48, label: '家庭区', to: 1 }]
-      },
-      {
-        src: 'assets/interior/家庭区1.jpeg',
-        name: '家庭区 1',
+        fov: 60, initLon: 270, initLat: 0, offset: 0,
         hotspots: [
-          { x: 50, y: 48, label: '洽谈区', to: 2 },
-          { x: 67, y: 48, label: '儿童区', to: 3 },
-          { x: 8,  y: 48, label: '展厅',  to: 0 }
+          { lon: 292, lat: -5,  label: '家庭区', arrow: true, to: 1 },
+          { lon: 235, lat: -4,  label: '洽谈区', arrow: true, to: 2 }
         ]
       },
       {
-        src: 'assets/interior/家庭区2.jpeg',
-        name: '家庭区 2',
+        src: 'assets/interior/全景家庭区2.jpeg',
+        name: '家庭区',
+        fov: 60, initLon: 270, initLat: 0, offset: 0, exposure: 0.7,
         hotspots: [
-          { x: 50, y: 48, label: '家庭区', to: 1 },
-          { x: 83, y: 48, label: '展厅',   to: 0 }
+          { lon: 226, lat: -10, label: '展厅区',    arrow: true, arrowSrc: 'assets/interior/箭头3.png', to: 0 },
+          { lon: 270, lat: -20, label: '选配洽谈区', arrow: true, to: 3 }
         ]
       },
       {
-        src: 'assets/interior/儿童区.jpeg',
-        name: '儿童区',
-        hotspots: [{ x: 50, y: 48, label: '返回家庭区', to: 1 }]
+        src: 'assets/interior/全景洽谈区.jpeg',
+        name: '洽谈区',
+        fov: 60, initLon: 270, initLat: 0, offset: 0,
+        hotspots: [
+          { lon: 310, lat: -8,  label: '展厅区',    arrow: true, arrowSrc: 'assets/interior/箭头2.png', to: 0 },
+          { lon: 268, lat: -15, label: '选配洽谈区', arrow: true, to: 3 }
+        ]
+      },
+      {
+        src: 'assets/interior/全景家庭区1.jpeg',
+        name: '家庭区1',
+        fov: 60, initLon: 270, initLat: 0, offset: 0, exposure: 0.7,
+        hotspots: [
+          { lon: 360, lat: -10, label: '返回洽谈区', arrow: true, to: 2 },
+          { lon: 175, lat: -15, label: '家庭区',     arrow: true, to: 1 }
+        ]
       }
     ];
 
-    let currentScene = 0, maxPan = 0, currentX = 0, targetX = 0;
-    let dragging = false, startClientX = 0, startPanX = 0, didDrag = false;
+    /* Three.js setup */
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.LinearToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    renderer.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;';
+    hero.insertBefore(renderer.domElement, hero.firstChild);
 
-    function calcMaxPan() {
-      const r = img.naturalWidth / img.naturalHeight;
-      maxPan = Math.max(0, img.offsetHeight * r - hero.offsetWidth) / 2;
+    const scene3 = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 2, 0.1, 1000);
+    camera.target = new THREE.Vector3();
+
+    const geo = new THREE.SphereGeometry(500, 60, 40);
+    geo.scale(-1, 1, 1);
+    const mat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene3.add(mesh);
+
+    const hsLayer = document.createElement('div');
+    hsLayer.style.cssText = 'position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;';
+    hero.appendChild(hsLayer);
+
+    const HFOV = 90;
+    function resizeRenderer() {
+      const W = hero.offsetWidth || hero.clientWidth || window.innerWidth;
+      const H = hero.offsetHeight || hero.clientHeight || Math.round(window.innerHeight * 0.85);
+      if (!W || !H) return;
+      renderer.setSize(W, H);
+      camera.aspect = W / H;
+      camera.fov = 2 * Math.atan(Math.tan(HFOV * Math.PI / 360) / camera.aspect) * 180 / Math.PI;
+      camera.updateProjectionMatrix();
     }
-    if (img.complete && img.naturalWidth) calcMaxPan();
-    img.addEventListener('load', calcMaxPan);
-    window.addEventListener('resize', calcMaxPan);
+    window.addEventListener('resize', resizeRenderer);
 
-    function clamp(v) { return Math.min(maxPan, Math.max(-maxPan, v)); }
+    let lon = 0, lat = 5, targetLon = 0, targetLat = 5;
+    let dragging = false, startX = 0, startY = 0, startLon = 0, startLat = 0, didDrag = false;
+    let hsEls = [];
+
+    const texCache = {};
+    function loadTex(src, cb) {
+      if (texCache[src]) { cb(texCache[src]); return; }
+      new THREE.TextureLoader().load(src, tex => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        texCache[src] = tex; cb(tex);
+      }, undefined, err => {
+        console.error('[360] Texture failed:', src, err);
+      });
+    }
+
+    function buildHotspots(sc) {
+      hsLayer.innerHTML = ''; hsEls = [];
+      (sc.hotspots || []).forEach(hs => {
+        const el = document.createElement('div');
+        el.style.pointerEvents = 'all';
+        if (hs.arrow) {
+          const imgClass = hs.arrowSrc && hs.arrowSrc.includes('箭头3') ? 'int-hero-arrow-img arrow3'
+            : hs.arrowSrc && hs.arrowSrc.includes('箭头2') ? 'int-hero-arrow-img arrow2'
+            : 'int-hero-arrow-img';
+          el.className = 'int-hero-arrow';
+          const labelMargin = hs.arrowSrc && hs.arrowSrc.includes('箭头3') ? '50px' : '-20px';
+          const labelOffset = hs.arrowSrc && hs.arrowSrc.includes('箭头3') ? 'margin-left:60px;' : '';
+          el.innerHTML = '<img class="' + imgClass + '" src="' + (hs.arrowSrc || 'assets/interior/箭头1.png') + '" alt="">'
+            + (hs.label ? '<div style="text-align:center;font-size:9px;color:rgba(255,255,255,.5);margin-top:' + labelMargin + ';' + labelOffset + 'transform:rotateX(40deg);transform-origin:top center;letter-spacing:.06em;white-space:nowrap;text-shadow:0 0 6px rgba(0,0,0,.6)">' + hs.label + '</div>' : '');
+        } else {
+          el.className = 'int-hero-hotspot';
+          el.innerHTML = '<div class="int-hero-hotspot-ring"></div><div class="int-hero-hotspot-dot"></div>'
+            + (hs.label ? '<span class="int-hero-hotspot-label">' + hs.label + '</span>' : '');
+        }
+        el.addEventListener('click', () => { if (!didDrag && hs.to != null) loadScene(hs.to); });
+        hsLayer.appendChild(el);
+        hsEls.push({ el, hs });
+      });
+    }
+
+    function updateHotspots() {
+      const W = hero.offsetWidth, H = hero.offsetHeight;
+      hsEls.forEach(({ el, hs }) => {
+        const phi   = THREE.MathUtils.degToRad(90 - (hs.lat || 0));
+        const theta = THREE.MathUtils.degToRad(hs.lon || 0);
+        const v = new THREE.Vector3(
+          500 * Math.sin(phi) * Math.cos(theta),
+          500 * Math.cos(phi),
+          500 * Math.sin(phi) * Math.sin(theta)
+        );
+        v.project(camera);
+        const inFront = v.z < 1;
+        el.style.display = inFront ? 'block' : 'none';
+        if (inFront) {
+          el.style.left = ((v.x + 1) / 2 * W) + 'px';
+          el.style.top  = ((-v.y + 1) / 2 * H) + 'px';
+        }
+      });
+    }
+
+    let currentScene = -1;
+    function loadScene(idx) {
+      const sc = SCENES[idx];
+      if (!sc) return;
+      const isFirstLoad = currentScene === -1;
+      currentScene = idx;
+      if (!isFirstLoad) overlay.classList.add('active');
+      const delay = isFirstLoad ? 0 : 350;
+      setTimeout(() => {
+        loadTex(sc.src, tex => {
+          tex.wrapS = THREE.RepeatWrapping;
+          tex.offset.x = sc.offset || 0;
+          mat.map = tex; mat.needsUpdate = true;
+          camera.fov = sc.fov || 75;
+          camera.updateProjectionMatrix();
+          targetLon = sc.initLon || 0;
+          targetLat = sc.initLat || 0;
+          renderer.toneMappingExposure = sc.exposure || 1.0;
+          buildHotspots(sc);
+          setTimeout(() => overlay.classList.remove('active'), 50);
+        });
+      }, delay);
+    }
 
     hero.addEventListener('mousedown', e => {
-      if (e.target.closest('.int-hero-hotspot')) return;
+      if (e.target.closest('.int-hero-hotspot, .int-hero-arrow')) return;
       dragging = true; didDrag = false;
-      startClientX = e.clientX; startPanX = currentX;
+      startX = e.clientX; startY = e.clientY;
+      startLon = targetLon; startLat = targetLat;
       hero.style.cursor = 'grabbing';
       if (hint) hint.classList.add('fade-out');
       e.preventDefault();
     });
     window.addEventListener('mousemove', e => {
       if (!dragging) return;
-      const d = e.clientX - startClientX;
-      if (Math.abs(d) > 3) didDrag = true;
-      targetX = clamp(startPanX + d);
+      const dx = e.clientX - startX, dy = e.clientY - startY;
+      if (Math.abs(dx) + Math.abs(dy) > 3) didDrag = true;
+      targetLon = startLon - dx * 0.15;
+      targetLat = Math.max(-85, Math.min(85, startLat + dy * 0.08));
     });
     window.addEventListener('mouseup', () => {
       if (dragging) { dragging = false; hero.style.cursor = 'grab'; }
       setTimeout(() => { didDrag = false; }, 10);
     });
     hero.addEventListener('touchstart', e => {
-      if (e.target.closest('.int-hero-hotspot')) return;
-      startClientX = e.touches[0].clientX; startPanX = currentX; didDrag = false;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      startLon = targetLon; startLat = targetLat; didDrag = false;
       if (hint) hint.classList.add('fade-out');
     }, { passive: true });
     hero.addEventListener('touchmove', e => {
-      const d = e.touches[0].clientX - startClientX;
-      if (Math.abs(d) > 3) didDrag = true;
-      targetX = clamp(startPanX + d);
+      const dx = e.touches[0].clientX - startX, dy = e.touches[0].clientY - startY;
+      if (Math.abs(dx) + Math.abs(dy) > 3) didDrag = true;
+      targetLon = startLon - dx * 0.15;
+      targetLat = Math.max(-85, Math.min(85, startLat + dy * 0.08));
     }, { passive: true });
 
     function animate() {
-      currentX += (targetX - currentX) * 0.08;
-      wrap.style.transform = 'translateX(calc(-50% + ' + currentX.toFixed(2) + 'px))';
       requestAnimationFrame(animate);
-    }
-    animate();
-
-    function buildHotspots(scene) {
-      wrap.querySelectorAll('.int-hero-hotspot').forEach(el => el.remove());
-      scene.hotspots.forEach(hs => {
-        const el = document.createElement('div');
-        el.className = 'int-hero-hotspot';
-        el.style.cssText = 'left:' + hs.x + '%;top:' + hs.y + '%';
-        el.innerHTML =
-          '<div class="int-hero-hotspot-ring"></div>' +
-          '<div class="int-hero-hotspot-dot"></div>' +
-          '<span class="int-hero-hotspot-label">' + hs.label + '</span>';
-        el.addEventListener('click', () => { if (!didDrag && hs.to != null) loadScene(hs.to); });
-        wrap.appendChild(el);
-      });
+      lon += (targetLon - lon) * 0.07;
+      lat += (targetLat - lat) * 0.07;
+      const phi   = THREE.MathUtils.degToRad(90 - lat);
+      const theta = THREE.MathUtils.degToRad(lon);
+      camera.target.set(
+        500 * Math.sin(phi) * Math.cos(theta),
+        500 * Math.cos(phi),
+        500 * Math.sin(phi) * Math.sin(theta)
+      );
+      camera.lookAt(camera.target);
+      updateHotspots();
+      renderer.render(scene3, camera);
     }
 
-    function loadScene(idx) {
-      if (idx === currentScene) return;
-      overlay.classList.add('active');
-      setTimeout(() => {
-        currentScene = idx;
-        const scene = SCENES[idx];
-        img.src = scene.src;
-        currentX = 0; targetX = 0;
-        buildHotspots(scene);
-        const reveal = () => { calcMaxPan(); setTimeout(() => overlay.classList.remove('active'), 60); };
-        if (img.complete && img.naturalWidth) reveal();
-        else img.onload = reveal;
-      }, 420);
-    }
-
-    buildHotspots(SCENES[0]);
-    hero.style.cursor = 'grab';
-    calcMaxPan();
+    requestAnimationFrame(() => {
+      resizeRenderer();
+      loadScene(0);
+      animate();
+    });
   }
 
   // ─── Fade-up Observer (interior) ───────────────────────────
@@ -594,9 +696,4 @@
     hotspotRetail.addEventListener('click', () => zcOpen('assets/interior/空间构成.jpeg'));
   }
 
-  // Expose init functions for switchSection
-  window.initInteriorTour     = initInteriorTour;
-  window.initInteriorObserver = initInteriorObserver;
-
 })();
-
