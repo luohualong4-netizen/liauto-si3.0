@@ -1,32 +1,72 @@
 <!DOCTYPE html>
-<html lang="zh-CN" translate="no">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google" content="notranslate">
 <title>设计总览 · 理想汽车 SI 3.0 室内标准</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap" rel="stylesheet">
 <style>
 @font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Medium.otf') format('opentype');font-weight:normal;font-style:normal;font-display:swap}
 @font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
-@font-face{font-family:'LiciumFont';src:url('assets/fonts/LiciumFont2022-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'LiciumFont',-apple-system,sans-serif;background:#fff;color:#0a0a0a;line-height:1.6;overflow-x:hidden;padding-top:52px}
+body{font-family:'LiciumFont','Inter',-apple-system,sans-serif;background:#fff;color:#0a0a0a;line-height:1.6;overflow-x:hidden}
 
 /* ── NAV ── */
-.nav{position:fixed;inset:0 0 auto 0;height:52px;z-index:1000;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:background .3s}
-.nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 40px;gap:16px}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:#0a0a0a;cursor:pointer}
-.nav-brand{font-size:13px;font-weight:700;letter-spacing:.06em;color:#0a0a0a}
-.nav-title{font-size:13px;color:#888;font-weight:400;letter-spacing:-.01em}
-.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#555;text-decoration:none;padding:6px 14px;border-radius:20px;border:1px solid rgba(0,0,0,.1);transition:all .15s;cursor:pointer}
-.nav-back:hover{color:#004724;border-color:rgba(0,71,36,.3);background:rgba(0,71,36,.04)}
-.nav-back svg{transition:transform .15s}
-.nav-back:hover svg{transform:translateX(-2px)}
+.nav{position:fixed;inset:0 0 auto 0;height:52px;z-index:1000;background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);transition:background .3s}
+.nav.scrolled{background:rgba(255,255,255,.94)}
+.nav-inner{max-width:1920px;margin:0 auto;height:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 360px;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:0;text-decoration:none;color:#0a0a0a}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{padding:5px 13px;font-size:13px;font-weight:400;color:#666;cursor:pointer;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;letter-spacing:-.01em}
+.nav-link:hover{color:#0a0a0a;background:rgba(0,0,0,.055)}
+.nav-link.active{color:#1c5c35;font-weight:600}
+.nav-right{display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.nav-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#555;transition:background .15s,color .15s}
+.nav-icon:hover{background:rgba(0,0,0,.07);color:#0a0a0a}
+
+/* ── MEGA MENU ── */
+.mega-scrim{position:fixed;top:52px;left:0;right:0;bottom:0;background:rgba(0,0,0,.28);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:997}
+.mega-scrim.show{opacity:1;pointer-events:auto}
+.mega-panel{position:fixed;top:52px;left:0;right:0;z-index:999;background:rgba(252,252,252,.97);backdrop-filter:saturate(180%) blur(28px);-webkit-backdrop-filter:saturate(180%) blur(28px);border-bottom:1px solid rgba(0,0,0,.08);border-radius:0 0 12px 12px;box-shadow:0 8px 36px rgba(0,0,0,.08);pointer-events:none;opacity:0;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease}
+.mega-panel.open{opacity:1;transform:translateY(0);pointer-events:auto}
+.mega-content{display:none;padding:28px 0 32px}
+.mega-content.active{display:block}
+.mega-inner{max-width:1200px;margin:0 auto;padding:0}
+.mega-section-label{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#c0c0c0;margin-bottom:16px;padding:0 4px}
+.mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.mega-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:9px;cursor:pointer;opacity:0;transition:background .15s}
+.mega-content.active .mega-item{animation:megaIn .3s cubic-bezier(.25,.46,.45,.94) forwards;animation-delay:calc(var(--i) * 35ms)}
+@keyframes megaIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.mega-item:hover{background:rgba(0,0,0,.055)}
+.mega-icon{flex-shrink:0;width:36px;height:36px;border-radius:9px;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;color:#555;transition:background .18s,color .18s}
+.mega-item:hover .mega-icon{background:#0a0a0a;color:#fff}
+.mega-label{font-size:13px;font-weight:500;color:#111;letter-spacing:-.015em;line-height:1.3}
+.mega-desc{font-size:11px;color:#b5b5b5;letter-spacing:-.005em;margin-top:1px;line-height:1.35}
+/* ── CASCADE MENU (3-level) ── */
+.mega-cascade-header{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#c0c0c0;margin-bottom:16px;padding:0}
+.mega-cascade{display:flex;gap:0}
+.mega-l2-list{width:140px;flex-shrink:0;padding:0 28px 0 0;display:flex;flex-direction:column;gap:4px;border-right:1px solid rgba(0,0,0,.07)}
+.mega-l2-item{display:block;padding:8px 0;cursor:pointer}
+.mega-l2-label{font-size:20px;font-weight:600;color:#bbb;letter-spacing:-.02em;transition:color .12s;display:block;line-height:1.3}
+.mega-l2-item:hover .mega-l2-label{color:#0a0a0a}
+.mega-l2-item.active .mega-l2-label{color:#004724}
+.mega-l3-panel{flex:1;padding:0 0 0 32px}
+.mega-l3-content{display:none}
+.mega-l3-content.active{display:block}
+.mega-l3-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.mega-l3-item{display:block;padding:7px 10px;border-radius:7px;cursor:pointer;opacity:0;transition:background .12s}
+.mega-l3-content.active .mega-l3-item{animation:megaIn .22s cubic-bezier(.25,.46,.45,.94) forwards;animation-delay:calc(var(--i) * 22ms)}
+.mega-l3-item:hover{background:rgba(0,0,0,.04)}
+.mega-l3-label{font-size:13.5px;font-weight:300;font-family:'LiciumFont','Inter',-apple-system,sans-serif;color:#111;letter-spacing:-.01em;transition:color .12s}
+.mega-l3-item:hover .mega-l3-label{color:#004724}
 
 /* ── LAYOUT ── */
-.container{max-width:1200px;margin:0 auto;padding:0 40px}
-img{display:block;max-width:100%;height:auto}
+.container{max-width:1200px;margin:0 auto;padding:0}
+.container-wide{max-width:1400px;margin:0 auto;padding:0}
+
 
 /* ── SCROLL ANIMATIONS ── */
 .fade-up{opacity:0;transform:translateY(44px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
@@ -36,60 +76,37 @@ img{display:block;max-width:100%;height:auto}
 [data-delay="3"]{transition-delay:.45s}
 [data-delay="4"]{transition-delay:.6s}
 
-/* ── OVERVIEW SECTIONS ── */
-.overview-section{padding:80px 0 100px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
-.overview-section:first-of-type{border-top:none;padding-top:60px}
-.overview-grid{display:grid;grid-template-columns:360px 1fr;gap:60px;align-items:start}
-.overview-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:8px}
-.overview-subtitle{font-size:14px;font-weight:600;color:#666;margin-bottom:20px}
-.overview-bullets{list-style:none;padding:0;margin:0 0 32px}
-.overview-bullets li{font-size:13px;color:#666;line-height:1.85;padding-left:14px;position:relative;margin-bottom:6px}
-.overview-bullets li::before{content:'·';position:absolute;left:0;color:#bbb;font-size:18px;line-height:1.5}
-.overview-bullets li strong{color:#444;font-weight:600}
-.overview-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:22px;display:flex;flex-direction:column;gap:10px}
-.legend-row{display:flex;align-items:center;gap:12px;font-size:13px;color:#555}
-.legend-sw{width:26px;height:12px;border-radius:3px;flex-shrink:0}
-.fl-legend-below{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:14px;border-top:1px solid rgba(0,0,0,.07);margin-top:14px}
-.fl-legend-sym{width:40px;height:12px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-start}
-.fl-zone-list{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;border-top:1px solid rgba(0,0,0,.07);padding-top:18px;margin-bottom:18px}
-.fl-zone-item{font-size:11.5px;color:#666;display:flex;align-items:center;gap:7px;line-height:1.55}
-.fl-zone-num{width:18px;height:18px;border-radius:50%;background:#1a8a70;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* ── FLOOR PLAN WRAP ── */
+/* ── FLOOR PLAN SECTION ── */
+.fp-section{padding:140px 0;background:#f6f6f4}
+.section-hd{margin-bottom:48px}
+.section-kicker{display:block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1c5c35;margin-bottom:16px}
+.section-big-title{font-size:clamp(36px,4.5vw,56px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.12;margin-bottom:10px}
+.section-sub{font-size:16px;color:#bbb;font-weight:400}
 .fp-wrap{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.11),0 4px 16px rgba(0,0,0,.06)}
-.fp-wrap img{display:block;width:100%;height:auto;border-radius:18px}
-.fp-zone-hit{position:absolute;cursor:pointer;border-radius:4px;transition:background .18s}
-.fp-zone-hit:hover{background:rgba(255,255,255,.18)}
-
-/* ── GALLERY ── */
-.gallery-section{padding:80px 0 100px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
-.gallery-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:36px}
-.gallery-row{display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr;gap:6px;margin-bottom:6px}
-.gallery-row:last-child{margin-bottom:0}
-.gallery-label{writing-mode:vertical-lr;font-size:11px;color:#999;letter-spacing:.08em;display:flex;align-items:center;justify-content:center}
-.gallery-cell{border-radius:10px;overflow:hidden;line-height:0;cursor:pointer;position:relative;aspect-ratio:4/3}
-.gallery-cell img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
-.gallery-cell:hover img{transform:scale(1.03)}
-
-/* ── LIGHTBOX ── */
-.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s ease}
-.lb-overlay.active{opacity:1;pointer-events:all}
-.lb-img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain;box-shadow:0 32px 96px rgba(0,0,0,.5);user-select:none;width:auto;height:auto;display:block}
-.lb-close{position:fixed;top:22px;right:28px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;transition:background .15s}
-.lb-close:hover{background:rgba(255,255,255,.22)}
-.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;transition:background .15s}
-.lb-arrow:hover{background:rgba(255,255,255,.24)}
-.lb-prev{left:20px}
-.lb-next{right:20px}
-.lb-counter{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.06em}
+.fp-wrap svg{display:block;width:100%;height:auto}
+.fp-hs-layer{position:absolute;inset:0;pointer-events:none}
+.hs{position:absolute;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);color:#1a1a1a;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:all;transform:translate(-50%,-50%);box-shadow:0 2px 12px rgba(0,0,0,.2),0 0 0 1.5px rgba(255,255,255,.8);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,background .2s;z-index:10;animation:hsIn .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes hsIn{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.hs:hover{transform:translate(-50%,-50%) scale(1.22);background:#fff;box-shadow:0 6px 22px rgba(0,0,0,.24),0 0 0 2px #fff}
+.hs::after{content:attr(data-label);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(10,10,10,.9);color:#fff;font-size:11px;font-weight:400;padding:5px 12px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .18s;z-index:50}
+.hs:hover::after{opacity:1}
+.hs.active{background:#1c5c35;color:#fff;box-shadow:0 6px 22px rgba(28,92,53,.5),0 0 0 2px #fff}
+.hs.active::before{content:'';position:absolute;width:50px;height:50px;border-radius:50%;background:rgba(28,92,53,.16);animation:ripple 1.8s infinite}
+@keyframes ripple{0%{transform:scale(.5);opacity:1}100%{transform:scale(2.1);opacity:0}}
+.fp-legend-glass{position:absolute;top:22px;right:22px;background:rgba(255,255,255,.76);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:14px;padding:18px 22px;box-shadow:0 4px 22px rgba(0,0,0,.08)}
+.fp-lg-kicker{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:14px}
+.fp-lg-row{display:flex;align-items:center;gap:9px;margin-bottom:9px;font-size:12.5px;color:#333}
+.fp-lg-row:last-child{margin-bottom:0}
+.fp-lg-sw{width:22px;height:8px;border-radius:2px;flex-shrink:0}
 
 /* ── STANDARDS INTRO ── */
-.stds-intro{padding:100px 0 60px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
+.stds-intro{padding:140px 0 80px;background:#fff}
+.stds-intro-inner{max-width:720px}
 .big-label{font-size:clamp(72px,9vw,108px);font-weight:900;letter-spacing:-.06em;line-height:.95;color:#0a0a0a;margin-bottom:20px}
 .big-label .dim{color:#e8e8e8}
 .stds-intro-sub{font-size:18px;color:#aaa;line-height:1.75}
 
-/* ── STANDARD SECTIONS ── */
+/* ── STANDARD SECTION ── */
 .std-sec{padding:110px 0;border-top:1px solid #f0f0f0}
 .std-sec:nth-child(odd){background:#fafafa}
 .std-sec:nth-child(even){background:#fff}
@@ -97,7 +114,6 @@ img{display:block;max-width:100%;height:auto}
 .std-inner.rev .std-vis{order:2}
 .std-inner.rev .std-text{order:1}
 .std-vis{border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#f0ece5;display:flex;align-items:center;justify-content:center;position:relative}
-.std-diagram{width:100%;height:auto;display:block}
 .vis-num{position:absolute;bottom:-12px;right:-8px;font-size:140px;font-weight:900;letter-spacing:-.06em;line-height:1;color:rgba(0,0,0,.05);user-select:none}
 .std-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
 .std-badge-dot{width:5px;height:5px;border-radius:50%}
@@ -120,45 +136,276 @@ img{display:block;max-width:100%;height:auto}
 .dim{display:inline-block;background:#edf5ed;color:#1a5028;padding:1px 8px;border-radius:4px;font-size:11.5px;font-weight:600}
 .callout{background:#fffbf4;border-left:3px solid #c8893c;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:26px;font-size:14px;color:#777;line-height:1.8}
 
+/* ── FOOTER ── */
+footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(0,0,0,.06)}
+.footer-copy{font-size:12px;color:#bbb;letter-spacing:.01em}
+
+/* ── BACK BAR ── */
+.back-bar{padding:72px 0 0;background:#fff}
+.back-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:#888;cursor:pointer;transition:color .15s;letter-spacing:-.01em;text-decoration:none}
+.back-btn:hover{color:#004724}
+.back-btn svg{transition:transform .15s}
+.back-btn:hover svg{transform:translateX(-3px)}
+
+/* ── OVERVIEW TWO-COLUMN LAYOUT ── */
+.overview-section{padding:80px 0 120px;background:#fff}
+.overview-grid{display:grid;grid-template-columns:360px 1fr;gap:60px;align-items:center}
+.overview-kicker{display:block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1c5c35;margin-bottom:14px}
+.overview-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:8px}
+.overview-subtitle{font-size:14px;font-weight:600;color:#666;margin-bottom:20px}
+.overview-bullets{list-style:none;padding:0;margin:0 0 32px}
+.overview-bullets li{font-size:13px;color:#666;line-height:1.85;padding-left:14px;position:relative;margin-bottom:6px}
+.overview-bullets li::before{content:'·';position:absolute;left:0;color:#bbb;font-size:18px;line-height:1.5}
+.overview-bullets li strong{color:#444;font-weight:600}
+.overview-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:22px;display:flex;flex-direction:column;gap:10px}
+.legend-row{display:flex;align-items:center;gap:12px;font-size:13px;color:#555}
+.legend-sw{width:26px;height:12px;border-radius:3px;flex-shrink:0}
+.fl-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.fl-legend-col{display:flex;flex-direction:column;gap:9px}
+.fl-legend-sym{width:40px;height:12px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-start}
+.fl-legend-below{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:14px;border-top:1px solid rgba(0,0,0,.07);margin-top:14px}
+/* ── 效果总览 GALLERY ── */
+.gallery-section{padding:80px 0 120px;background:#fff;border-top:1px solid rgba(0,0,0,.07)}
+.gallery-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:36px}
+.gallery-row{display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr;gap:6px;margin-bottom:6px}
+.gallery-row:last-child{margin-bottom:0}
+.gallery-label{writing-mode:vertical-lr;font-size:11px;color:#999;letter-spacing:.08em;display:flex;align-items:center;justify-content:center}
+.gallery-cell{border-radius:10px;overflow:hidden;line-height:0;cursor:pointer;position:relative}
+.gallery-cell img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.gallery-cell:hover img{transform:scale(1.03)}
+/* lightbox */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.lb-overlay.active{opacity:1;pointer-events:all}
+.lb-img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain;box-shadow:0 32px 96px rgba(0,0,0,.5);user-select:none}
+.lb-close{position:fixed;top:22px;right:28px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;transition:background .15s}
+.lb-close:hover{background:rgba(255,255,255,.22)}
+.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;transition:background .15s}
+.lb-arrow:hover{background:rgba(255,255,255,.24)}
+.lb-prev{left:20px}
+.lb-next{right:20px}
+.lb-counter{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.06em}
+
+/* ── 功能布局 SECTION ── */
+.fl-section{padding:80px 0 120px;background:#fff}
+.fl-grid{display:grid;grid-template-columns:360px 1fr;gap:60px;align-items:start}
+.fl-left{align-self:start}
+.fl-title{font-size:clamp(28px,3.2vw,42px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.1;margin-bottom:28px}
+.fl-subtitle{font-size:14px;font-weight:600;color:#666;margin-bottom:20px}
+.fl-bullets{list-style:none;padding:0;margin:0 0 28px}
+.fl-bullets li{font-size:13px;color:#666;line-height:1.85;padding-left:14px;position:relative;margin-bottom:6px}
+.fl-bullets li::before{content:'·';position:absolute;left:0;color:#bbb;font-size:18px;line-height:1.5}
+.fl-zone-list{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;border-top:1px solid rgba(0,0,0,.07);padding-top:18px;margin-bottom:18px}
+.fl-zone-item{font-size:11.5px;color:#666;display:flex;align-items:center;gap:7px;line-height:1.55}
+.fl-zone-num{width:18px;height:18px;border-radius:50%;background:#1a8a70;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl-area-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:16px;display:flex;flex-direction:column;gap:8px}
+.fl-area-row{display:flex;align-items:center;gap:10px;font-size:12px;color:#555}
+.fl-area-sw{width:24px;height:10px;border-radius:2px;flex-shrink:0}
+/* ── HOTSPOT ── */
+.fp-zone-hit{position:absolute;cursor:pointer;border-radius:4px;transition:background .18s}
+.fp-zone-hit:hover{background:rgba(255,255,255,.18)}
 /* ── ZONE CARD MODAL ── */
 .zc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1500;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s ease}
 .zc-overlay.active{opacity:1;pointer-events:all}
 .zc-card{background:#fff;border-radius:20px;max-width:1100px;width:100%;max-height:90vh;overflow:hidden;position:relative;box-shadow:0 48px 120px rgba(0,0,0,.3)}
-.zc-card img{display:block;width:100%;height:auto;max-height:90vh;object-fit:contain;border-radius:20px}
+.zc-img{display:block;width:100%;height:auto;max-height:90vh;object-fit:contain;border-radius:20px}
 .zc-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;font-size:15px;color:#555;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10}
 .zc-close:hover{background:rgba(0,0,0,.16)}
+.zc-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#1a8a70;background:#e8f5f0;padding:3px 10px;border-radius:20px;margin-bottom:14px;letter-spacing:.04em}
+.zc-title{font-size:clamp(20px,2.2vw,28px);font-weight:800;letter-spacing:-.04em;color:#0a0a0a;line-height:1.15;margin-bottom:18px}
+.zc-bullets{list-style:none;padding:0;margin:0 0 20px}
+.zc-bullets li{font-size:12px;color:#555;line-height:1.8;padding-left:14px;position:relative;margin-bottom:6px}
+.zc-bullets li::before{content:'·';position:absolute;left:0;color:#bbb;font-size:16px;line-height:1.6}
+.zc-bullets li strong{color:#333;font-weight:600}
+.zc-zones{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;border-top:1px solid rgba(0,0,0,.07);padding-top:12px;margin-bottom:14px}
+.zc-zone{font-size:11px;color:#666;display:flex;align-items:center;gap:5px;line-height:1.55}
+.zc-znum{width:15px;height:15px;border-radius:50%;background:#1a8a70;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.zc-legend{border-top:1px solid rgba(0,0,0,.07);padding-top:12px;display:flex;flex-direction:column;gap:7px}
+.zc-leg-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#555}
+.zc-leg-sw{width:22px;height:9px;border-radius:2px;flex-shrink:0}
+.zc-leg-sym{width:36px;height:12px;flex-shrink:0;display:flex;align-items:center}
 
-/* ── FOOTER ── */
-footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(0,0,0,.06)}
-.footer-copy{font-size:12px;color:#bbb;letter-spacing:.01em}
+/* ── RESPONSIVE ── */
+/* nav padding: scales from 24px on mobile to 360px only at 1920px+ */
+@media (max-width: 1800px) { .nav-inner { padding: 0 clamp(24px, 8vw, 280px); } }
+@media (max-width: 1400px) { .nav-inner { padding: 0 clamp(24px, 4vw, 120px); } }
+
+/* container: add side padding so content breathes on all viewport widths */
+.container, .container-wide {
+  padding-left: clamp(20px, 5vw, 60px);
+  padding-right: clamp(20px, 5vw, 60px);
+}
+
+/* scale down vertical spacing on wide monitors */
+@media (min-width: 1600px) {
+  .fp-section { padding: 100px 0; }
+  .stds-intro { padding: 100px 0 60px; }
+  .std-sec { padding: 80px 0; }
+  .overview-section { padding: 60px 0 90px; }
+  .fl-section { padding: 60px 0 90px; }
+  .gallery-section { padding: 60px 0 90px; }
+}
+
+/* two-column grids: stack on narrow viewports */
+@media (max-width: 960px) {
+  .overview-grid { grid-template-columns: 1fr; gap: 36px; }
+  .fl-grid { grid-template-columns: 1fr; gap: 36px; }
+  .std-inner { grid-template-columns: 1fr; gap: 40px; }
+  .std-inner.rev .std-vis { order: 0; }
+  .std-inner.rev .std-text { order: 0; }
+}
 </style>
 </head>
 <body>
 
 <!-- ═══ NAV ═══ -->
-<nav class="nav">
+<nav class="nav" id="nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="index.html">
-      <svg width="54" height="22" viewBox="0 0 49 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" fill="#111110" d="M38.3666 0.736389L43.2286 9.57411H28.2074L23.3684 0.736389H38.3666ZM24.1257 11.0241C22.4057 11.0241 20.617 10.8629 19.5162 9.91939C18.5987 9.20598 18.0941 8.37744 17.5667 7.43397C17.452 7.24681 16.1277 4.82963 15.106 2.96474L15.1055 2.96381C14.4929 1.84564 13.9891 0.926227 13.9204 0.80549H0C0.500179 1.7225 1.00036 2.64336 1.5011 3.56527L1.50114 3.56535L1.50117 3.56539C2.72228 5.81354 3.94676 8.06789 5.1828 10.2876C6.69629 13.0494 8.14103 15.6273 10.7783 17.5144C12.0399 18.4577 13.3698 19.0794 14.9294 19.4707C16.4659 19.839 18.0254 19.8849 19.6076 19.8849H31.9917L27.1299 11.0241H24.1257ZM29.0105 11.0011L33.8725 19.8849H48.8707L43.9857 11.0011H29.0105Z"/>
-      </svg>
-      <span class="nav-brand">SI 3.0</span>
+    <a class="nav-logo" href="lixiang-indoor.html">
+      <img src="图片素材/黑logo_transparent.png" alt="理想汽车" height="18" style="display:block">
     </a>
-    <span class="nav-title">室内设计原则</span>
-    <a class="nav-back" href="index.html">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 3L5 8l5 5"/>
-      </svg>
-      返回首页
-    </a>
+    <!-- Center: Nav links -->
+    <div class="nav-links">
+      <span class="nav-link" onclick="window.location.href='lixiang-indoor.html'">首页</span>
+      <span class="nav-link" data-menu="exterior">外立面标准</span>
+      <span class="nav-link active" data-menu="indoor">室内标准</span>
+      <span class="nav-link">外立面生成助手</span>
+    </div>
+    <!-- Right: Utility icons -->
+    <div class="nav-right">
+      <div class="nav-icon" title="搜索">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="6.5" cy="6.5" r="5"/>
+          <line x1="10.5" y1="10.5" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <div class="nav-icon" title="账户">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="5.5" r="3"/>
+          <path d="M1.5 15 C1.5 11.5 4.5 9 8 9 C11.5 9 14.5 11.5 14.5 15"/>
+        </svg>
+      </div>
+    </div>
   </div>
 </nav>
 
-<!-- ═══ 空间构成 ═══ -->
+<!-- ═══ SCRIM ═══ -->
+<div id="megaScrim" class="mega-scrim"></div>
+
+<!-- ═══ MEGA MENU PANEL ═══ -->
+<div class="mega-panel" id="megaPanel">
+
+  <!-- 室内标准 -->
+  <div class="mega-content" data-for="indoor">
+    <div class="mega-inner">
+      <div class="mega-cascade-header">室内标准</div>
+      <div class="mega-cascade">
+      <div class="mega-l2-list" style="width:160px">
+        <div class="mega-l2-item active" data-l3="design" style="--i:0">
+          <span class="mega-l2-label">室内设计原则</span>
+        </div>
+        <div class="mega-l2-item" data-l3="space" style="--i:1">
+          <span class="mega-l2-label">空间系统原则</span>
+        </div>
+        <div class="mega-l2-item" data-l3="material" style="--i:2">
+          <span class="mega-l2-label">材料与节点</span>
+        </div>
+      </div>
+      <div class="mega-l3-panel">
+        <div class="mega-l3-content active" data-l3="design">
+          <div class="mega-l3-grid">
+            <div class="mega-l3-item" style="--i:0"><span class="mega-l3-label">设计总览</span></div>
+            <div class="mega-l3-item" style="--i:1"><span class="mega-l3-label">零售中心</span></div>
+            <div class="mega-l3-item" style="--i:2"><span class="mega-l3-label">交付中心</span></div>
+            <div class="mega-l3-item" style="--i:3"><span class="mega-l3-label">服务中心</span></div>
+            <div class="mega-l3-item" style="--i:4"><span class="mega-l3-label">公用部分</span></div>
+            <div class="mega-l3-item" style="--i:5"><span class="mega-l3-label">辅助系统设备</span></div>
+            <div class="mega-l3-item" style="--i:6"><span class="mega-l3-label">模块原则</span></div>
+            <div class="mega-l3-item" style="--i:7"><span class="mega-l3-label">家具原则</span></div>
+            <div class="mega-l3-item" style="--i:8"><span class="mega-l3-label">软装饰品</span></div>
+            <div class="mega-l3-item" style="--i:9"><span class="mega-l3-label">软装绿植</span></div>
+          </div>
+        </div>
+        <div class="mega-l3-content" data-l3="space">
+          <div class="mega-l3-grid">
+            <div class="mega-l3-item" style="--i:0"><span class="mega-l3-label">外立面照明</span></div>
+            <div class="mega-l3-item" style="--i:1"><span class="mega-l3-label">停车区照明</span></div>
+            <div class="mega-l3-item" style="--i:2"><span class="mega-l3-label">室内照明</span></div>
+            <div class="mega-l3-item" style="--i:3"><span class="mega-l3-label">标识总览</span></div>
+            <div class="mega-l3-item" style="--i:4"><span class="mega-l3-label">标识细则</span></div>
+          </div>
+        </div>
+        <div class="mega-l3-content" data-l3="material">
+          <div class="mega-l3-grid">
+            <div class="mega-l3-item" style="--i:0"><span class="mega-l3-label">主材清单</span></div>
+            <div class="mega-l3-item" style="--i:1"><span class="mega-l3-label">五金清单</span></div>
+            <div class="mega-l3-item" style="--i:2"><span class="mega-l3-label">清单目录</span></div>
+            <div class="mega-l3-item" style="--i:3"><span class="mega-l3-label">天花节点</span></div>
+            <div class="mega-l3-item" style="--i:4"><span class="mega-l3-label">墙面节点</span></div>
+            <div class="mega-l3-item" style="--i:5"><span class="mega-l3-label">地面节点</span></div>
+            <div class="mega-l3-item" style="--i:6"><span class="mega-l3-label">外观节点</span></div>
+            <div class="mega-l3-item" style="--i:7"><span class="mega-l3-label">儿童区节点</span></div>
+            <div class="mega-l3-item" style="--i:8"><span class="mega-l3-label">楼梯节点</span></div>
+            <div class="mega-l3-item" style="--i:9"><span class="mega-l3-label">门节点</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- 外立面标准 -->
+  <div class="mega-content" data-for="exterior">
+    <div class="mega-inner">
+      <div class="mega-section-label">外立面标准</div>
+      <div class="mega-grid">
+        <div class="mega-item" style="--i:0">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="16" height="12" rx="1.5"/><path d="M5 6V4a1 1 0 011-1h8a1 1 0 011 1v2"/><line x1="10" y1="9" x2="10" y2="14"/><line x1="7" y1="11.5" x2="13" y2="11.5"/></svg></div>
+          <div><div class="mega-label">外立面概述</div><div class="mega-desc">品牌门店外观设计理念</div></div>
+        </div>
+        <div class="mega-item" style="--i:1">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V8l7-5 7 5v10"/><rect x="7" y="12" width="6" height="6"/></svg></div>
+          <div><div class="mega-label">门头标识</div><div class="mega-desc">LOGO 与品牌标识规范</div></div>
+        </div>
+        <div class="mega-item" style="--i:2">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="16" height="16" rx="1.5"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="14" y1="2" x2="14" y2="18"/><line x1="2" y1="7" x2="18" y2="7"/><line x1="2" y1="13" x2="18" y2="13"/></svg></div>
+          <div><div class="mega-label">玻璃幕墙</div><div class="mega-desc">通透幕墙比例与规格</div></div>
+        </div>
+        <div class="mega-item" style="--i:3">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14l8 3 8-3M2 10l8 3 8-3M2 6l8-3 8 3-8 3-8-3z"/></svg></div>
+          <div><div class="mega-label">材质规范</div><div class="mega-desc">外立面材料选型标准</div></div>
+        </div>
+        <div class="mega-item" style="--i:4">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="12" x2="10" y2="18"/><line x1="4" y1="8" x2="2" y2="8"/><line x1="18" y1="8" x2="16" y2="8"/><line x1="5.5" y1="3.5" x2="7" y2="5"/><line x1="14.5" y1="3.5" x2="13" y2="5"/></svg></div>
+          <div><div class="mega-label">夜景照明</div><div class="mega-desc">夜间光环境设计规范</div></div>
+        </div>
+        <div class="mega-item" style="--i:5">
+          <div class="mega-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3c0 5-5 7-5 11"/><path d="M10 3c0 5 5 7 5 11"/><line x1="5" y1="18" x2="15" y2="18"/><line x1="10" y1="3" x2="10" y2="18"/></svg></div>
+          <div><div class="mega-label">景观配套</div><div class="mega-desc">门前景观与绿化配置</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ BACK BAR ═══ -->
+<div class="back-bar">
+  <div class="container">
+    <a class="back-btn" onclick="navigateTo('interior-overview.html')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      返回室内标准
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FLOOR PLAN ═══ -->
 <section class="overview-section" id="floor-plan">
   <div class="container">
     <div class="overview-grid">
-      <div class="fade-up" style="align-self:start">
+      <!-- Left: text + legend -->
+      <div class="overview-left fade-up" style="align-self:start">
         <h2 class="overview-title">空间构成</h2>
         <p class="overview-subtitle">综合中心</p>
         <ul class="overview-bullets">
@@ -180,10 +427,12 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
           <div class="legend-row"><div class="legend-sw" style="background:#a8b2b8"></div><span>后场区 ≈ 11%</span></div>
         </div>
       </div>
-      <div class="fade-up" data-delay="1">
+      <!-- Right: floor plan card -->
+      <div class="overview-fp fade-up" data-delay="1">
         <div class="fp-wrap">
-          <img src="assets/interior/空间构成.jpeg" alt="空间构成平面图">
-          <div class="fp-zone-hit" id="hotspot-retail" style="left:14%;top:10%;width:25%;height:80%"></div>
+          <img src="图片素材/20260428-173743.jpeg" alt="空间构成平面图" style="display:block;width:100%;height:auto;border-radius:18px">
+          <!-- 零售区域 可点击层 -->
+          <div class="fp-zone-hit" id="hotspot-retail" style="left:8.5%;top:7%;width:31%;height:86%"></div>
         </div>
         <p style="text-align:center;font-size:12px;color:#bbb;margin-top:14px;letter-spacing:.03em">点击颜色区域查看设计细则</p>
       </div>
@@ -192,10 +441,11 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
 </section>
 
 <!-- ═══ 功能布局 ═══ -->
-<section class="overview-section">
+<section class="overview-section" style="border-top:1px solid rgba(0,0,0,.07)">
   <div class="container">
     <div class="overview-grid">
-      <div class="fade-up" style="align-self:start">
+      <!-- Left: text + zone list -->
+      <div class="overview-left fade-up" style="align-self:start">
         <h2 class="overview-title">功能布局</h2>
         <ul class="overview-bullets">
           <li>三端开放融合，但交付和服务需要分隔无交叉；</li>
@@ -205,6 +455,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
           <li><strong>共用空间：</strong>尽可能在中心，方便三端使用；</li>
           <li><strong>后场区：</strong>用户不可达区，优先人员办公，动线贴合后台流程。</li>
         </ul>
+        <!-- Zone number grid -->
         <div class="fl-zone-list">
           <div class="fl-zone-item"><div class="fl-zone-num">01</div>前厅接待</div>
           <div class="fl-zone-item"><div class="fl-zone-num">15</div>茶水柜</div>
@@ -236,9 +487,10 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
           <div class="fl-zone-item"></div>
         </div>
       </div>
-      <div class="fade-up" data-delay="1">
+      <!-- Right: floor plan image + legend below -->
+      <div class="overview-fp fade-up" data-delay="1">
         <div class="fp-wrap">
-          <img src="assets/interior/功能布局.jpeg" alt="功能布局平面图">
+          <img src="图片素材/功能布局.jpeg" alt="功能布局平面图" style="display:block;width:100%;height:auto;border-radius:18px">
         </div>
         <div class="fl-legend-below">
           <div class="legend-row"><div class="legend-sw" style="background:#f0ebe0;border:1px solid #ddd"></div><span>零售区域</span></div>
@@ -261,10 +513,10 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
 </section>
 
 <!-- ═══ 空间材质 ═══ -->
-<section class="overview-section">
+<section class="overview-section" style="border-top:1px solid rgba(0,0,0,.07)">
   <div class="container">
     <div class="overview-grid">
-      <div class="fade-up" style="align-self:start">
+      <div class="overview-left fade-up" style="align-self:start">
         <h2 class="overview-title">空间材质</h2>
         <ul class="overview-bullets">
           <li>图示为材质产生与赋能空间的过程，选用符合灵感定义的材质，营造家庭的、温暖的体验氛围；</li>
@@ -274,7 +526,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
       <div></div>
     </div>
     <div class="fp-wrap fade-up" style="margin-top:40px">
-      <img src="assets/interior/空间材质.jpeg" alt="空间材质">
+      <img src="图片素材/空间材质.jpeg" alt="空间材质" style="display:block;width:100%;height:auto;border-radius:18px">
     </div>
   </div>
 </section>
@@ -285,37 +537,27 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
     <h2 class="gallery-title fade-up">效果总览</h2>
     <div class="gallery-row fade-up">
       <div class="gallery-label">零售</div>
-      <div class="gallery-cell"><img src="assets/interior/总览1.png" alt="零售1"></div>
-      <div class="gallery-cell"><img src="assets/interior/总览2.png" alt="零售2"></div>
-      <div class="gallery-cell"><img src="assets/interior/总览3.png" alt="零售3"></div>
-      <div class="gallery-cell"><img src="assets/interior/总览4.png" alt="零售4"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/总览1.png" alt="零售1"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/总览2.png" alt="零售2"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/总览3.png" alt="零售3"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/总览4.png" alt="零售4"></div>
     </div>
     <div class="gallery-row fade-up">
       <div class="gallery-label">交付</div>
-      <div class="gallery-cell"><img src="assets/interior/交付1.png" alt="交付1"></div>
-      <div class="gallery-cell"><img src="assets/interior/交付2.png" alt="交付2"></div>
-      <div class="gallery-cell"><img src="assets/interior/交付3.png" alt="交付3"></div>
-      <div class="gallery-cell"><img src="assets/interior/交付4.png" alt="交付4"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/交付1.png" alt="交付1"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/交付2.png" alt="交付2"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/交付3.png" alt="交付3"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/交付4.png" alt="交付4"></div>
     </div>
     <div class="gallery-row fade-up">
       <div class="gallery-label">服务</div>
-      <div class="gallery-cell"><img src="assets/interior/服务1.png" alt="服务1"></div>
-      <div class="gallery-cell"><img src="assets/interior/服务2.png" alt="服务2"></div>
-      <div class="gallery-cell"><img src="assets/interior/服务3.png" alt="服务3"></div>
-      <div class="gallery-cell"><img src="assets/interior/服务4.png" alt="服务4"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/服务1.png" alt="服务1"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/服务2.png" alt="服务2"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/服务3.png" alt="服务3"></div>
+      <div class="gallery-cell"><img src="图片素材/效果总览图片/服务4.png" alt="服务4"></div>
     </div>
   </div>
 </section>
-
-<!-- ═══ STANDARDS INTRO ═══ -->
-<section class="stds-intro">
-  <div class="container">
-    <p class="big-label"><span class="dim">S.</span>02–13</p>
-    <p class="stds-intro-sub">以下列出 12 项关键室内设计标准，覆盖零售、服务与交付三大功能区。</p>
-  </div>
-</section>
-
-<!-- S-02 室内展车区 -->
 <section class="std-sec" id="s-2">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -348,7 +590,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-03 接待台 -->
+<!-- ═══ S-03 接待台 ═══ -->
 <section class="std-sec" id="s-3">
   <div class="container">
     <div class="std-inner fade-up">
@@ -386,7 +628,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-04 VIP 洽谈室 -->
+<!-- ═══ S-04 VIP 洽谈室 ═══ -->
 <section class="std-sec" id="s-4">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -421,7 +663,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-05 & S-06 洽谈区 -->
+<!-- ═══ S-05 & S-06 洽谈区 ═══ -->
 <section class="std-sec" id="s-5">
   <div id="s-6" style="position:absolute;top:-80px"></div>
   <div class="container">
@@ -463,7 +705,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-07 会议桌 -->
+<!-- ═══ S-07 会议桌 ═══ -->
 <section class="std-sec" id="s-7">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -507,7 +749,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-08 服务工作站 -->
+<!-- ═══ S-08 服务工作站 ═══ -->
 <section class="std-sec" id="s-8">
   <div class="container">
     <div class="std-inner fade-up">
@@ -542,7 +784,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-09 内部会议室 -->
+<!-- ═══ S-09 内部会议室 ═══ -->
 <section class="std-sec" id="s-9">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -574,7 +816,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-10 客户等候区 -->
+<!-- ═══ S-10 客户等候区 ═══ -->
 <section class="std-sec" id="s-10">
   <div class="container">
     <div class="std-inner fade-up">
@@ -610,7 +852,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-11 配件展示区 -->
+<!-- ═══ S-11 配件展示区 ═══ -->
 <section class="std-sec" id="s-11">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -644,7 +886,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-12 交付仪式区 -->
+<!-- ═══ S-12 交付仪式区 ═══ -->
 <section class="std-sec" id="s-12">
   <div class="container">
     <div class="std-inner fade-up">
@@ -678,7 +920,7 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- S-13 交付准备区 -->
+<!-- ═══ S-13 交付准备区 ═══ -->
 <section class="std-sec" id="s-13">
   <div class="container">
     <div class="std-inner rev fade-up">
@@ -719,83 +961,171 @@ footer{background:#f2f2f0;padding:36px 48px;display:flex;align-items:center;just
   <span class="footer-copy">© 2026 理想汽车 · 空间设计标准 SI 3.0</span>
 </footer>
 
-<!-- ═══ LIGHTBOX ═══ -->
-<div class="lb-overlay" id="lbOverlay">
+<script>
+// Page transitions
+function navigateTo(url) {
+  document.body.classList.remove('ready');
+  document.body.classList.add('exit');
+  setTimeout(() => { window.location.href = url; }, 100);
+}
+// NAV scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Mega menu
+const megaPanel = document.getElementById('megaPanel');
+const megaScrim = document.getElementById('megaScrim');
+let closeTimer = null;
+
+function resetL3Anim(l3Content) {
+  l3Content.querySelectorAll('.mega-l3-item').forEach(item => {
+    item.style.animation = 'none';
+    void item.offsetHeight;
+    item.style.animation = '';
+  });
+}
+
+function initCascade(content) {
+  const firstL2 = content.querySelector('.mega-l2-item');
+  if (!firstL2) return;
+  content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
+  firstL2.classList.add('active');
+  const l3Key = firstL2.dataset.l3;
+  content.querySelectorAll('.mega-l3-content').forEach(c => c.classList.remove('active'));
+  const l3 = content.querySelector(`.mega-l3-content[data-l3="${l3Key}"]`);
+  if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
+}
+
+function openMega(menuKey, triggerEl) {
+  clearTimeout(closeTimer);
+  const allContents = megaPanel.querySelectorAll('.mega-content');
+  const target = megaPanel.querySelector(`.mega-content[data-for="${menuKey}"]`);
+  if (!target) return;
+  allContents.forEach(c => c.classList.remove('active'));
+  requestAnimationFrame(() => {
+    target.classList.add('active');
+    megaPanel.classList.add('open');
+    megaScrim.classList.add('show');
+    if (menuKey === 'indoor') initCascade(target);
+  });
+}
+
+function closeMega() {
+  closeTimer = setTimeout(() => {
+    megaPanel.classList.remove('open');
+    megaScrim.classList.remove('show');
+    megaPanel.querySelectorAll('.mega-content').forEach(c => c.classList.remove('active'));
+  }, 200);
+}
+
+document.querySelectorAll('.nav-link[data-menu]').forEach(link => {
+  link.addEventListener('mouseenter', () => openMega(link.dataset.menu, link));
+  link.addEventListener('mouseleave', closeMega);
+});
+megaPanel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+megaPanel.addEventListener('mouseleave', closeMega);
+megaScrim.addEventListener('click', closeMega);
+
+// L2 hover → switch L3 content
+megaPanel.addEventListener('mouseover', (e) => {
+  const l2 = e.target.closest('.mega-l2-item');
+  if (!l2) return;
+  const l3Key = l2.dataset.l3;
+  const content = l2.closest('.mega-content');
+  if (!content) return;
+  if (l2.classList.contains('active')) return;
+  content.querySelectorAll('.mega-l2-item').forEach(i => i.classList.remove('active'));
+  l2.classList.add('active');
+  const oldL3 = content.querySelector('.mega-l3-content.active');
+  if (oldL3) oldL3.classList.remove('active');
+  const l3 = content.querySelector(`.mega-l3-content[data-l3="${l3Key}"]`);
+  if (l3) { resetL3Anim(l3); l3.classList.add('active'); }
+});
+document.querySelectorAll('.nav-link:not([data-menu])').forEach(link => {
+  link.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      megaPanel.classList.remove('open');
+      megaScrim.classList.remove('show');
+      megaPanel.querySelectorAll('.mega-content').forEach(c => c.classList.remove('active'));
+    }, 80);
+  });
+});
+
+// Scroll animations (Intersection Observer)
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ── LIGHTBOX ──
+const lb = document.createElement('div');
+lb.className = 'lb-overlay';
+lb.innerHTML = `
   <button class="lb-close" id="lbClose">&#x2715;</button>
   <button class="lb-arrow lb-prev" id="lbPrev">&#8249;</button>
   <img class="lb-img" id="lbImg" src="" alt="">
   <button class="lb-arrow lb-next" id="lbNext">&#8250;</button>
-  <div class="lb-counter" id="lbCounter"></div>
-</div>
+  <div class="lb-counter" id="lbCounter"></div>`;
+document.body.appendChild(lb);
 
-<!-- ═══ ZONE CARD MODAL ═══ -->
-<div class="zc-overlay" id="zcOverlay">
-  <div class="zc-card">
-    <button class="zc-close" id="zcClose">&#x2715;</button>
-    <img src="assets/interior/功能布局.jpeg" alt="功能布局原则">
-  </div>
-</div>
-
-<script>
-// Scroll animations
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
-
-// Nav scroll tint
-window.addEventListener('scroll', () => {
-  document.querySelector('.nav').style.background =
-    window.scrollY > 20 ? 'rgba(255,255,255,.97)' : 'rgba(255,255,255,.92)';
-}, { passive: true });
-
-// Lightbox
-const lbOverlay = document.getElementById('lbOverlay');
-const lbImg     = document.getElementById('lbImg');
-const lbClose   = document.getElementById('lbClose');
-const lbPrev    = document.getElementById('lbPrev');
-const lbNext    = document.getElementById('lbNext');
-const lbCounter = document.getElementById('lbCounter');
 let lbImages = [], lbIndex = 0;
 
 function lbShow(idx) {
   lbIndex = (idx + lbImages.length) % lbImages.length;
-  lbImg.src = lbImages[lbIndex];
-  lbCounter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  document.getElementById('lbImg').src = lbImages[lbIndex];
+  document.getElementById('lbCounter').textContent = (lbIndex + 1) + ' / ' + lbImages.length;
 }
 
-document.querySelectorAll('.gallery-row').forEach(row => {
-  const cells = row.querySelectorAll('.gallery-cell');
-  cells.forEach((cell, i) => {
-    cell.addEventListener('click', () => {
-      lbImages = Array.from(cells).map(c => c.querySelector('img').src);
-      lbOverlay.classList.add('active');
-      lbShow(i);
-    });
+document.querySelectorAll('.gallery-cell img').forEach((img, i) => {
+  img.parentElement.addEventListener('click', () => {
+    lbImages = Array.from(document.querySelectorAll('.gallery-cell img')).map(m => m.src);
+    lb.classList.add('active');
+    lbShow(i);
   });
 });
 
-lbClose.addEventListener('click', () => lbOverlay.classList.remove('active'));
-lbPrev.addEventListener('click', () => lbShow(lbIndex - 1));
-lbNext.addEventListener('click', () => lbShow(lbIndex + 1));
-lbOverlay.addEventListener('click', e => { if (e.target === lbOverlay) lbOverlay.classList.remove('active'); });
+document.getElementById('lbClose').addEventListener('click', () => lb.classList.remove('active'));
+document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); lbShow(lbIndex - 1); });
+document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); lbShow(lbIndex + 1); });
+lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('active'); });
 document.addEventListener('keydown', e => {
-  if (!lbOverlay.classList.contains('active')) return;
-  if (e.key === 'Escape') lbOverlay.classList.remove('active');
+  if (!lb.classList.contains('active')) return;
+  if (e.key === 'Escape') lb.classList.remove('active');
   if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
   if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
 });
 
-// Zone card modal
-const zcOverlay = document.getElementById('zcOverlay');
-const zcClose   = document.getElementById('zcClose');
-document.getElementById('hotspot-retail').addEventListener('click', () => zcOverlay.classList.add('active'));
-zcClose.addEventListener('click', () => zcOverlay.classList.remove('active'));
-zcOverlay.addEventListener('click', e => { if (e.target === zcOverlay) zcOverlay.classList.remove('active'); });
+// ── ZONE CARD ──
+
+</script>
+
+<!-- ── ZONE CARD MODAL ── -->
+<div class="zc-overlay" id="zcOverlay">
+  <div class="zc-card">
+    <button class="zc-close" id="zcClose">&#x2715;</button>
+    <img class="zc-img" src="图片素材/零售中心设计细则/零售设计原则1.png" alt="零售功能布局原则">
+  </div>
+</div>
+<script>
+document.getElementById('hotspot-retail').addEventListener('click', () => {
+  document.getElementById('zcOverlay').classList.add('active');
+});
+document.getElementById('zcClose').addEventListener('click', () => {
+  document.getElementById('zcOverlay').classList.remove('active');
+});
+document.getElementById('zcOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('zcOverlay')) document.getElementById('zcOverlay').classList.remove('active');
+});
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') zcOverlay.classList.remove('active');
+  if (e.key === 'Escape') document.getElementById('zcOverlay').classList.remove('active');
 });
 </script>
 </body>
