@@ -394,11 +394,7 @@
     const hero    = document.getElementById('int-heroSection');
     const hint    = document.getElementById('int-heroPanHint');
     const overlay = document.getElementById('int-heroSceneOverlay');
-    if (!hero || typeof THREE === 'undefined') {
-      if (hero) hero.style.cssText += 'display:flex;align-items:center;justify-content:center;background:#111;';
-      if (hero) hero.innerHTML = '<p style="color:#fff;font-size:14px">3D 引擎加载失败，请刷新重试</p>';
-      return;
-    }
+    if (!hero || typeof THREE === 'undefined') return;
 
     const SCENES = [
       {
@@ -464,14 +460,14 @@
 
     const HFOV = 90;
     function resizeRenderer() {
-      const W = hero.offsetWidth || hero.clientWidth || window.innerWidth;
-      const H = hero.offsetHeight || hero.clientHeight || Math.round(window.innerHeight * 0.85);
+      const W = hero.offsetWidth, H = hero.offsetHeight;
       if (!W || !H) return;
       renderer.setSize(W, H);
       camera.aspect = W / H;
       camera.fov = 2 * Math.atan(Math.tan(HFOV * Math.PI / 360) / camera.aspect) * 180 / Math.PI;
       camera.updateProjectionMatrix();
     }
+    resizeRenderer();
     window.addEventListener('resize', resizeRenderer);
 
     let lon = 0, lat = 5, targetLon = 0, targetLat = 5;
@@ -484,8 +480,6 @@
       new THREE.TextureLoader().load(src, tex => {
         tex.colorSpace = THREE.SRGBColorSpace;
         texCache[src] = tex; cb(tex);
-      }, undefined, err => {
-        console.error('[360] Texture failed:', src, err);
       });
     }
 
@@ -534,14 +528,10 @@
       });
     }
 
-    let currentScene = -1;
     function loadScene(idx) {
       const sc = SCENES[idx];
       if (!sc) return;
-      const isFirstLoad = currentScene === -1;
-      currentScene = idx;
-      if (!isFirstLoad) overlay.classList.add('active');
-      const delay = isFirstLoad ? 0 : 350;
+      overlay.classList.add('active');
       setTimeout(() => {
         loadTex(sc.src, tex => {
           tex.wrapS = THREE.RepeatWrapping;
@@ -555,7 +545,7 @@
           buildHotspots(sc);
           setTimeout(() => overlay.classList.remove('active'), 50);
         });
-      }, delay);
+      }, 350);
     }
 
     hero.addEventListener('mousedown', e => {
@@ -606,11 +596,8 @@
       renderer.render(scene3, camera);
     }
 
-    requestAnimationFrame(() => {
-      resizeRenderer();
-      loadScene(0);
-      animate();
-    });
+    loadScene(0);
+    animate();
   }
 
   // ─── Fade-up Observer (interior) ───────────────────────────
